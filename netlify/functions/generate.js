@@ -20,21 +20,25 @@ const createActaPrompt = (prod) => `
   Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT UNTUK GAYA HALUS (PROFESIONAL) ---
+// --- PROMPT BARU UNTUK GAYA HALUS (VSOFT) ---
 const createHalusPrompt = (prod) => `
-  Anda adalah seorang Copywriter Viral yang elegan dan persuasif. 
-  Gunakan formula HALUS (isi: VSOFT → Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON:
+  Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
+  Anda harus menggunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
+  
+  PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
+
+  Berikut adalah definisi setiap elemen formula VSOFT:
   - V (Vivid Problem): Gambarkan masalah nyata dengan bahasa yang mudah dibayangkan.
-  - S (Story Touch): Sisipkan sedikit narasi/imajinasi audiens.
-  - O (Offer Clarity): Tampilkan produk sebagai solusi jelas.
-  - FT (Friendly CTA): Ajakan ramah + hashtag relevan.
+  - S (Story Touch): Sisipkan sedikit narasi atau imajinasi audiens, gunakan gaya bahasa yang personal (aku, kamu).
+  - O (Offer Clarity): Tampilkan produk sebagai solusi yang jelas dan bernilai.
+  - FT (Friendly CTA): Ajakan ramah, tidak memaksa, diikuti hashtag relevan.
 
   Contoh:
   Input Produk: Kursus Public Speaking
   Output yang diharapkan:
   {
-    "vo": "Apakah Anda merasa gugup saat harus berbicara di depan banyak orang? Rasa tidak percaya diri ini bisa menghambat potensi karier Anda. Bayangkan jika Anda bisa menyampaikan ide dengan tenang dan meyakinkan. Temukan caranya di dalam kursus public speaking kami.",
-    "caption": "Tingkatkan kepercayaan diri dan kuasai panggung. Kursus kami dirancang untuk membantu Anda berbicara dengan lebih efektif dan profesional. Klik link di bio untuk mempelajari selengkapnya. #publicspeaking #personalgrowth #karier #komunikasi #sukses"
+    "vo": "Pernah merasa ide kamu brilian, tapi susah disampaikan karena gugup saat bicara di depan banyak orang?",
+    "caption": "Aku juga pernah ngalamin itu. Rasanya kesal banget ketika pesan penting jadi nggak sampai karena grogi. Sampai akhirnya aku belajar teknik public speaking yang sederhana tapi ngubah segalanya. Sekarang aku lebih tenang dan percaya diri. Siapa tau ini juga jadi solusi buat kamu 👉 Yuk cek kursus public speaking ini. #publicspeaking #percayaDiri #komunikasi #karier"
   }
   
   SEKARANG, TUGAS ANDA:
