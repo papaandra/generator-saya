@@ -5,14 +5,14 @@ const createActaPrompt = (prod) => `
   - A (Attention Hammer): Pembuka video yang mengejutkan atau provokatif.
   - C (Craving Trigger): Kalimat yang menyentuh emosi audiens (frustrasi, iri hati, ketakutan).
   - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia.
-  - A (Action Word): Tutup dengan CTA yang memaksa dan mengarah ke keranjang kuning.
+  - A (Action Word): Tutup dengan CTA yang WAJIB menggunakan Power Word "TERUNGKAP" dan mengarah ke keranjang kuning.
 
   Contoh:
-  Input Produk: Kursus Public Speaking
+  Input Produk: Sikat Gigi
   Output yang diharapkan:
   {
-    "vo": "MULUT TERKUNCI SAAT DI PANGGUNG? Bayangkan jika kamu bisa mengubah keringat dingin jadi tepuk tangan meriah. Ada satu teknik pernapasan 3 detik yang dipakai para CEO untuk menghilangkan demam panggung seketika. Jangan kelamaan segera di keranjang kuning.",
-    "caption": "Jangan lagi buang waktu grogi di panggung! Temukan rahasia yang bikin kamu percaya diri. Cek keranjang kuning untuk infonya! #publicspeaking #belajarpresentasi #suksesmuda #terungkap #rahasia"
+    "vo": "Stop sikat gigi pakai cara lama! Gak pede ngobrol dari dekat karena napas bau naga? Ternyata, cara sikat gigi yang diajarkan sejak SD itu salah. Rahasia sikat gigi yang benar akan TERUNGKAP di keranjang kuning.",
+    "caption": "Punya masalah napas bau? Klik keranjang kuning buat solusinya! #sikatgigi #napasnaga #kesehatanmulut #terungkap #viral #fyp"
   }
   
   SEKARANG, TUGAS ANDA:
@@ -34,11 +34,37 @@ const createHalusPrompt = (prod) => `
   - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
 
   Contoh:
-  Input Produk: Kursus Public Speaking
+  Input Produk: Sikat Gigi
   Output yang diharapkan:
   {
-    "vo": "Pernah merasa punya ide brilian, tapi gugup saat menyampaikannya? Bayangkan jika kamu bisa bercerita dengan tenang dan meyakinkan. Ini adalah cara untuk mencapainya.",
-    "caption": "Grogi saat bicara itu wajar, tapi jangan sampai menghambat potensimu. Dengan teknik yang tepat, kamu bisa jadi lebih percaya diri. Siapa tau ini solusinya? Cek keranjang kuning! #publicspeaking #percayaDiri #komunikasi"
+    "vo": "Apakah Anda sering merasa gigi belum bersih sempurna? Sisa kuman bisa menyebabkan masalah gusi. Bayangkan jika setiap sikat gigi bisa terasa seperti pembersihan di dokter gigi. Koleksi kami sudah tersedia di keranjang kuning.",
+    "caption": "Untuk senyum yang sehat dan percaya diri, kebersihan gigi adalah kunci. Sikat gigi kami didesain dengan teknologi terbaru untuk membersihkan hingga ke sela terdalam. Jadikan kebersihan mulut sebagai prioritas. Cek keranjang kuning sekarang. #perawatangigi #sikatgigipremium #senyumsehat #kesehatanmulut"
+  }
+  
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
+`;
+
+// --- PROMPT BARU UNTUK GAYA GEN Z (VIBE) ---
+const createGenZPrompt = (prod) => `
+  Anda adalah seorang Viral Content Creator yang autentik, santai, dan menggunakan gaya bahasa anak muda (Gen Z).
+  Anda harus menggunakan formula VIBE (Vibes Check, Instant Relevancy, Brevity & Punchline, Easy Action) untuk membuat konten dalam format JSON.
+  
+  PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
+
+  Berikut adalah definisi setiap elemen formula VIBE:
+  - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul.
+  - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
+  - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
+  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman, dan mengarah ke keranjang kuning.
+
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "POV: abis makan seblak pedes banget, terus napas naga. Cuma satu sikat ini, vibes mulut auto fresh lagi. Gak pake ribet.",
+    "caption": "Pusing gak sih nyari sikat gigi yang bener-bener works? Udah deh, gak usah pusing lagi. Langsung co di keranjang kuning. #napasnaga #sikatgigi #racuntiktok #xyzbca #beliditiktokshop"
   }
   
   SEKARANG, TUGAS ANDA:
@@ -71,6 +97,8 @@ export async function handler(event) {
     let finalPrompt;
     if (style === 'halus') {
       finalPrompt = createHalusPrompt(product);
+    } else if (style === 'genz') {
+      finalPrompt = createGenZPrompt(product);
     } else {
       finalPrompt = createActaPrompt(product);
     }
