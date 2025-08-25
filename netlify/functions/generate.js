@@ -5,14 +5,14 @@ const createActaPrompt = (prod) => `
   - A (Attention Hammer): Pembuka video yang mengejutkan atau provokatif.
   - C (Craving Trigger): Kalimat yang menyentuh emosi audiens (frustrasi, iri hati, ketakutan).
   - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia.
-  - A (Action Word): Tutup dengan CTA yang WAJIB menggunakan Power Word "TERUNGKAP".
+  - A (Action Word): Tutup dengan CTA yang WAJIB menggunakan Power Word "TERUNGKAP" dan mengarah ke keranjang kuning.
 
   Contoh:
   Input Produk: Kursus Public Speaking
   Output yang diharapkan:
   {
-    "vo": "MULUT TERKUNCI SAAT DI PANGGUNG? Bayangkan jika kamu bisa mengubah keringat dingin jadi tepuk tangan meriah. Ada satu teknik pernapasan 3 detik yang dipakai para CEO untuk menghilangkan demam panggung seketika. Teknik itu akan TERUNGKAP di kursus ini.",
-    "caption": "Jangan lagi buang waktu grogi di panggung! Temukan rahasia yang bikin kamu percaya diri. Link di bio untuk tahu caranya! #publicspeaking #belajarpresentasi #suksesmuda #terungkap #rahasia"
+    "vo": "MULUT TERKUNCI SAAT DI PANGGUNG? Bayangkan jika kamu bisa mengubah keringat dingin jadi tepuk tangan meriah. Ada satu teknik pernapasan 3 detik yang dipakai para CEO untuk menghilangkan demam panggung seketika. Teknik itu akan TERUNGKAP di keranjang kuning.",
+    "caption": "Jangan lagi buang waktu grogi di panggung! Temukan rahasia yang bikin kamu percaya diri. Cek keranjang kuning untuk infonya! #publicspeaking #belajarpresentasi #suksesmuda #terungkap #rahasia"
   }
   
   SEKARANG, TUGAS ANDA:
@@ -31,14 +31,14 @@ const createHalusPrompt = (prod) => `
   - V (Vivid Problem): Gambarkan masalah nyata dengan bahasa yang mudah dibayangkan.
   - S (Story Touch): Sisipkan sedikit narasi atau imajinasi audiens, gunakan gaya bahasa yang personal (aku, kamu).
   - O (Offer Clarity): Tampilkan produk sebagai solusi yang jelas dan bernilai.
-  - FT (Friendly CTA): Ajakan ramah, tidak memaksa, diikuti hashtag relevan.
+  - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
 
   Contoh:
   Input Produk: Kursus Public Speaking
   Output yang diharapkan:
   {
     "vo": "Pernah merasa punya ide brilian, tapi gugup saat menyampaikannya? Bayangkan jika kamu bisa bercerita dengan tenang dan meyakinkan. Ini adalah cara untuk mencapainya.",
-    "caption": "Grogi saat bicara itu wajar, tapi jangan sampai menghambat potensimu. Dengan teknik yang tepat, kamu bisa jadi lebih percaya diri. Siapa tau ini solusinya? Cek link di bio! #publicspeaking #percayaDiri #komunikasi"
+    "caption": "Grogi saat bicara itu wajar, tapi jangan sampai menghambat potensimu. Dengan teknik yang tepat, kamu bisa jadi lebih percaya diri. Siapa tau ini solusinya? Cek keranjang kuning! #publicspeaking #percayaDiri #komunikasi"
   }
   
   SEKARANG, TUGAS ANDA:
