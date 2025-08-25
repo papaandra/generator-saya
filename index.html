@@ -69,6 +69,29 @@
     .row > div {
       flex: 0 0 auto;
     }
+
+    /* --- PERBAIKAN UNTUK MOBILE --- */
+    @media (max-width: 600px) {
+      .row {
+        flex-wrap: wrap;
+      }
+      .row input[type="text"],
+      .row select,
+      .row button {
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 8px; /* Tambah jarak antar elemen */
+      }
+      .row > div {
+        flex: 1;
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 8px;
+      }
+      .row button {
+        margin-top: 2px;
+      }
+    }
   </style>
 </head>
 <body>
