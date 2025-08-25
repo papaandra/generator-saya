@@ -2,16 +2,16 @@
 const createActaPrompt = (prod) => `
   Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
   Anda harus menggunakan formula A.C.T.A (Attention, Craving, Tension, Action).
-  - A (Attention Hammer): Pembuka video yang mengejutkan atau provokatif.
+  - A (Attention Hammer): Pembuka video yang mengejutkan, provokatif, atau kontroversial. Tujuannya adalah memecah pola scroll dan memaksa audiens berhenti dalam 1 detik pertama.
   - C (Craving Trigger): Kalimat yang menyentuh emosi audiens (frustrasi, iri hati, ketakutan).
   - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia.
-  - A (Action Word): Tutup dengan CTA yang tegas lugas dan mengarah ke keranjang kuning.
+  - A (Action Word): Tutup dengan CTA yang TEGAS LUGAS dan mengarah ke keranjang kuning.
 
   Contoh:
   Input Produk: Sikat Gigi
   Output yang diharapkan:
   {
-    "vo": "Stop sikat gigi pakai cara lama! Gak pede ngobrol dari dekat karena napas bau naga? Ternyata, cara sikat gigi yang diajarkan sejak SD itu salah. Buruan aja kamu cek di keranjang kuning.",
+    "vo": "STOP! Jangan sikat gigi dengan cara ini lagi. Gak pede ngobrol karena napas bau naga? Ternyata, cara sikat gigi yang diajarkan sejak SD itu salah. Buruan aja di keranjang kuning mumpung lagi promo.",
     "caption": "Punya masalah napas bau? Klik keranjang kuning buat solusinya! #sikatgigi #napasnaga #kesehatanmulut #terungkap #viral #fyp"
   }
   
@@ -57,13 +57,13 @@ const createGenZPrompt = (prod) => `
   - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul (POV, spill, vibes).
   - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
   - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
-  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
+  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman, dan mengarah ke keranjang kuning.
 
   Contoh:
   Input Produk: Sikat Gigi
   Output yang diharapkan:
   {
-    "vo": "POV: abis makan seblak pedes banget, terus napas naga. Cuma satu sikat ini, vibes mulut auto fresh lagi. Spill produknya di keranjang kuning ya.",
+    "vo": "Abis makan seblak pedes banget, terus napas naga. Cuma satu sikat ini, vibes mulut auto fresh lagi. Spill produknya di keranjang kuning ya.",
     "caption": "Pusing gak sih nyari sikat gigi yang bener-bener works? Udah deh, gak usah pusing lagi. Wajib punya sih ini, langsung co aja. #napasnaga #sikatgigi #racuntiktok #xyzbca #beliditiktokshop"
   }
   
