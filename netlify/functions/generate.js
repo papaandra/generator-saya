@@ -54,17 +54,17 @@ const createGenZPrompt = (prod) => `
   PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
 
   Berikut adalah definisi setiap elemen formula VIBE:
-  - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul.
+  - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul (POV, spill, vibes).
   - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
   - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
-  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman, dan mengarah ke keranjang kuning.
+  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
 
   Contoh:
   Input Produk: Sikat Gigi
   Output yang diharapkan:
   {
-    "vo": "POV: abis makan seblak pedes banget, terus napas naga. Cuma satu sikat ini, vibes mulut auto fresh lagi. Gak pake ribet.",
-    "caption": "Pusing gak sih nyari sikat gigi yang bener-bener works? Udah deh, gak usah pusing lagi. Langsung co di keranjang kuning. #napasnaga #sikatgigi #racuntiktok #xyzbca #beliditiktokshop"
+    "vo": "POV: abis makan seblak pedes banget, terus napas naga. Cuma satu sikat ini, vibes mulut auto fresh lagi. Spill produknya di keranjang kuning ya.",
+    "caption": "Pusing gak sih nyari sikat gigi yang bener-bener works? Udah deh, gak usah pusing lagi. Wajib punya sih ini, langsung co aja. #napasnaga #sikatgigi #racuntiktok #xyzbca #beliditiktokshop"
   }
   
   SEKARANG, TUGAS ANDA:
