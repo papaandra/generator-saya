@@ -24,6 +24,7 @@ const createActaPrompt = (prod) => `
 const createHalusPrompt = (prod) => `
   Anda adalah seorang Copywriter Profesional dan Brand Strategist.
   Tugas Anda adalah membuat konten yang elegan, persuasif, dan profesional dalam format JSON.
+
   Gunakan formula P.A.V.E (Problem, Agitate, Value, Encourage):
   - P (Problem): Mulai dengan menyebutkan masalah audiens secara halus dan penuh empati.
   - A (Agitate): Sentuh sedikit dampak dari masalah tersebut.
@@ -59,15 +60,12 @@ export async function handler(event) {
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
   try {
-    // Membaca 'product', 'mode', dan 'style' dari request body
-    // Jika 'style' tidak ada, default-nya adalah 'acta'
     const { product, mode, style = 'acta' } = JSON.parse(event.body);
     
     if (!product) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
     }
 
-    // Memilih prompt berdasarkan parameter 'style'
     let finalPrompt;
     if (style === 'halus') {
       finalPrompt = createHalusPrompt(product);
