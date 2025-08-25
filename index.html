@@ -51,6 +51,24 @@
     .footer { margin-top: 16px; display:flex; justify-content: space-between; color: var(--muted); font-size:12px; }
     .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#22c55e; border-radius:50%; animation:spin .8s linear infinite; vertical-align:-3px; }
     @keyframes spin { to{ transform:rotate(360deg); } }
+
+    select {
+      background: #0b1220;
+      color: var(--text);
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      cursor:pointer;
+      min-width: 140px;
+    }
+    .row > div {
+      flex: 0 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -63,6 +81,12 @@
     <div class="card">
       <div class="row">
         <input id="product" type="text" placeholder="Masukkan produk… (contoh: Sepatu Cowok)" />
+        <div>
+          <select id="styleSelector">
+            <option value="acta">🔥 ACTA (Viral)</option>
+            <option value="halus">✨ HALUS (Profesional)</option>
+          </select>
+        </div>
         <button id="genBtn">Generate</button>
         <button id="clearBtn" class="secondary">Clear</button>
       </div>
@@ -111,8 +135,8 @@
             const errJson = await res.json();
             throw new Error(errJson.error || "Terjadi kesalahan pada server.");
         } catch(e) {
-            // Jika gagal parsing, tampilkan status text
-            throw new Error(res.statusText || ("HTTP Error " + res.status));
+          // Jika gagal parsing, tampilkan status text
+          throw new Error(res.statusText || ("HTTP Error " + res.status));
         }
       }
       return res.json();
@@ -132,10 +156,13 @@
       const product = $("product").value.trim();
       if (!product) return alert("Isi nama produk dulu ya.");
       state.lastProduct = product;
+      
+      const style = $("styleSelector").value;
+
       setLoading(true, $("vo"));
       $("caption").value = "⏳ Generating…";
       try {
-        const data = await callApi("/.netlify/functions/generate", { product, mode: "both" });
+        const data = await callApi("/.netlify/functions/generate", { product, mode: "both", style });
         $("vo").value = data.vo || "";
         $("caption").value = data.caption || "";
         state.lastVO = data.vo || "";
@@ -152,9 +179,12 @@
     async function regen(kind) {
       const product = state.lastProduct || $("product").value.trim();
       if (!product) return alert("Isi nama produk dulu ya.");
+      
+      const style = $("styleSelector").value;
+
       setLoading(true, kind === "vo" ? $("vo") : $("caption"));
       try {
-        const data = await callApi("/.netlify/functions/generate", { product, mode: kind });
+        const data = await callApi("/.netlify/functions/generate", { product, mode: kind, style });
         if (kind === "vo") {
           $("vo").value = data.vo || "";
           state.lastVO = data.vo || "";
