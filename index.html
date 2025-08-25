@@ -1,30 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tes Fungsi Netlify</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔥 Viral Hook Generator — 15s TTS</title>
+  <meta name="description" content="Generate VO (4 kalimat ~15 detik) + Caption & Hashtag dengan Formula Matrix Viral Hook." />
+  <style>
+    * { box-sizing: border-box; }
+    :root { --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e5e7eb; --accent:#22c55e; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: linear-gradient(160deg, #0b1020, #0a0f1e 40%, #0b1226);
+      color: var(--text);
+      min-height: 100vh; display:flex; align-items:center; justify-content:center; padding:32px;
+    }
+    .app { width:100%; max-width: 860px; }
+    .header {
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:20px;
+    }
+    h1 { font-size: clamp(22px, 2.4vw, 28px); margin:0; letter-spacing: .3px; }
+    .badge { font-size:12px; color:#a3e635; background:#052e16; border:1px solid #14532d; padding:4px 8px; border-radius:999px; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid rgba(148,163,184,.15);
+      border-radius: 16px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .row { display:flex; gap:10px; }
+    input[type="text"] {
+      flex:1;
+      background: #0b1220; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 10px; padding: 12px 14px; font-size: 15px;
+      outline: none;
+    }
+    button {
+      background: #10b981; color:#00100a; font-weight:700;
+      border: none; border-radius: 10px; padding: 12px 16px; font-size: 15px; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(16,185,129,.25);
+    }
+    button.secondary { background: #1f2937; color:#e5e7eb; box-shadow: none; border:1px solid rgba(148,163,184,.2); }
+    .grid { display:grid; grid-template-columns: 1fr; gap: 14px; margin-top:14px; }
+    @media (min-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .box h3 { margin:6px 0 10px 0; font-size: 14px; color: var(--muted); letter-spacing:.3px; }
+    textarea {
+      width:100%; height: 180px; background:#020617; color:var(--text);
+      border:1px solid rgba(148,163,184,.15); border-radius:12px; padding:12px; resize: vertical; font-size:14px; line-height:1.5;
+    }
+    .actions { display:flex; gap:8px; margin-top:8px; }
+    .hint { margin-top: 10px; font-size: 12px; color: var(--muted); }
+    .footer { margin-top: 16px; display:flex; justify-content: space-between; color: var(--muted); font-size:12px; }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#22c55e; border-radius:50%; animation:spin .8s linear infinite; vertical-align:-3px; }
+    @keyframes spin { to{ transform:rotate(360deg); } }
+  </style>
 </head>
 <body>
-    <h1>Tes Fungsi Netlify</h1>
-    <button id="testButton">Jalankan Fungsi</button>
-    <p id="result">Hasil akan muncul di sini...</p>
+  <div class="app">
+    <div class="header">
+      <h1>🔥 Viral Hook Generator <span class="badge">15s TTS</span></h1>
+      <div style="font-size:12px;color:#9ca3af">Formula Matrix: Pattern • Trigger • Gap • Power Word + CTA</div>
+    </div>
 
-    <script>
-        document.getElementById('testButton').addEventListener('click', async () => {
-            const resultP = document.getElementById('result');
-            resultP.textContent = 'Memanggil fungsi...';
-            try {
-                const response = await fetch('/.netlify/functions/tes');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                resultP.textContent = `Sukses! Pesan dari server: ${data.message}`;
-            } catch (error) {
-                resultP.textContent = `Gagal: ${error.message}`;
-            }
-        });
-    </script>
+    <div class="card">
+      <div class="row">
+        <input id="product" type="text" placeholder="Masukkan produk… (contoh: Sepatu Cowok)" />
+        <button id="genBtn">Generate</button>
+        <button id="clearBtn" class="secondary">Clear</button>
+      </div>
+
+      <div class="grid">
+        <div class="box">
+          <h3>🔊 Voice Over (4 kalimat • ±15 detik)</h3>
+          <textarea id="vo" readonly placeholder="Hasil VO akan muncul di sini…"></textarea>
+          <div class="actions">
+            <button id="copyVo">Copy VO</button>
+            <button id="regenVo" class="secondary">Regenerate VO</button>
+          </div>
+          <div class="hint">Tip: paste ke TTS, atur speed ±1.0 untuk durasi ±15s.</div>
+        </div>
+        <div class="box">
+          <h3>✍️ Caption & Hashtag</h3>
+          <textarea id="caption" readonly placeholder="Hasil Caption & Hashtag akan muncul di sini…"></textarea>
+          <div class="actions">
+            <button id="copyCap">Copy Caption</button>
+            <button id="regenCap" class="secondary">Regenerate Caption</button>
+          </div>
+          <div class="hint">Format: 2–3 kalimat + 5 hashtag relevan.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>No tracking. Runs via Netlify Function.</div>
+        <div id="status">Ready</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const state = { lastProduct: "", lastVO: "", lastCaption: "" };
+
+    async function callApi(route, payload) {
+      const res = await fetch(route, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        // Coba parsing error dari JSON yang dikirim server
+        try {
+            const errJson = await res.json();
+            throw new Error(errJson.error || "Terjadi kesalahan pada server.");
+        } catch(e) {
+            // Jika gagal parsing, tampilkan status text
+            throw new Error(res.statusText || ("HTTP Error " + res.status));
+        }
+      }
+      return res.json();
+    }
+
+    function setLoading(loading, target) {
+      const status = $("status");
+      if (loading) {
+        status.innerHTML = '<span class="spinner"></span> Generating…';
+        if (target) target.value = "⏳ Generating…";
+      } else {
+        status.textContent = "Ready";
+      }
+    }
+
+    async function generateAll() {
+      const product = $("product").value.trim();
+      if (!product) return alert("Isi nama produk dulu ya.");
+      state.lastProduct = product;
+      setLoading(true, $("vo"));
+      $("caption").value = "⏳ Generating…";
+      try {
+        const data = await callApi("/.netlify/functions/generate", { product, mode: "both" });
+        $("vo").value = data.vo || "";
+        $("caption").value = data.caption || "";
+        state.lastVO = data.vo || "";
+        state.lastCaption = data.caption || "";
+      } catch (e) {
+        $("vo").value = "";
+        $("caption").value = "";
+        alert("Gagal generate: " + e.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function regen(kind) {
+      const product = state.lastProduct || $("product").value.trim();
+      if (!product) return alert("Isi nama produk dulu ya.");
+      setLoading(true, kind === "vo" ? $("vo") : $("caption"));
+      try {
+        const data = await callApi("/.netlify/functions/generate", { product, mode: kind });
+        if (kind === "vo") {
+          $("vo").value = data.vo || "";
+          state.lastVO = data.vo || "";
+        } else {
+          $("caption").value = data.caption || "";
+          state.lastCaption = data.caption || "";
+        }
+      } catch (e) {
+        alert("Gagal regenerate: " + e.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function copyToClipboard(elId) {
+      const el = $(elId);
+      el.select();
+      document.execCommand("copy");
+      const btn = elId === "vo" ? $("copyVo") : $("copyCap");
+      const prev = btn.textContent;
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = prev), 900);
+    }
+
+    $("genBtn").addEventListener("click", generateAll);
+    $("clearBtn").addEventListener("click", () => { $("product").value=""; $("vo").value=""; $("caption").value=""; });
+    $("regenVo").addEventListener("click", () => regen("vo"));
+    $("regenCap").addEventListener("click", () => regen("caption"));
+    $("copyVo").addEventListener("click", () => copyToClipboard("vo"));
+    $("copyCap").addEventListener("click", () => copyToClipboard("caption"));
+
+    // Enter to generate
+    $("product").addEventListener("keydown", (e) => { if (e.key === "Enter") generateAll(); });
+  </script>
 </body>
 </html>
