@@ -31,20 +31,28 @@ export async function handler(event) {
     }
 
     // 4. MEMBUAT PROMPT DETAIL (MENGGUNAKAN FORMULA MATRIX ANDA)
+    // PROMPT INI SUDAH DIKEMAS DENGAN STRUKTUR A.C.T.A. AGAR LEBIH EFEKTIF
     const createPrompt = (prod) => `
-      Buat konten viral untuk produk "${prod}" dalam format JSON.
-      Gunakan formula Matrix Hook Generator:
-      1) Pattern (interupsi),
-      2) Psychological Trigger (rasa termasuk/FOMO),
-      3) Curiosity Gap (info setengah),
-      4) Power Word + CTA (ajakan aksi).
+      Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
 
-      Struktur output JSON harus seperti ini:
+      Anda harus menggunakan formula A.C.T.A (Attention, Craving, Tension, Action) untuk membuat konten hook viral.
+      - A (Attention Hammer): Pembuka video yang mengejutkan, memecah pola, atau provokatif. (Contoh: "STOP!", "IKLAN ANDA BONCOS?").
+      - C (Craving Trigger): Kalimat yang menyentuh emosi atau masalah audiens (frustrasi, iri hati, ketakutan).
+      - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia atau solusi tanpa membocorkan intinya.
+      - A (Action Word): Tutup dengan Call to Action (CTA) yang WAJIB menggunakan Power Word "TERUNGKAP".
+
+      Berikut adalah contoh lengkap dari sebuah prompt dan output yang sempurna:
+      Input Produk: Kursus Public Speaking
+      Output yang diharapkan:
       {
-        "vo": "Voice over 4 kalimat pendek, total sekitar 15 detik, bahasa Indonesia, dan mengikuti formula Matrix di atas.",
-        "caption": "Caption 2-3 kalimat menarik ditambah 5 hashtag yang relevan."
+        "vo": "MULUT TERKUNCI SAAT DI PANGGUNG? Bayangkan jika kamu bisa mengubah keringat dingin jadi tepuk tangan meriah. Ada satu teknik pernapasan 3 detik yang dipakai para CEO untuk menghilangkan demam panggung seketika. Teknik itu akan TERUNGKAP di kursus ini.",
+        "caption": "Jangan lagi buang waktu grogi di panggung! Temukan rahasia yang bikin kamu percaya diri. Link di bio untuk tahu caranya! #publicspeaking #belajarpresentasi #suksesmuda #terungkap #rahasia"
       }
-    `;
+      
+      SEKARANG, TUGAS ANDA:
+      Gunakan formula dan contoh di atas untuk produk: "${prod}".
+      Jawab hanya dalam format JSON seperti contoh di atas. Jangan tambahkan teks lain di luar JSON.
+      `;
 
     // 5. Mengirim Request ke API OpenAI
     const response = await fetch(apiUrl, {
