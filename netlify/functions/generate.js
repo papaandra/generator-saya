@@ -1,49 +1,36 @@
 // --- PROMPT UNTUK GAYA A.C.T.A. (VIRAL) ---
 const createActaPrompt = (prod) => `
   Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
-  Anda harus menggunakan formula A.C.T.A (Attention, Craving, Tension, Action).
-  - A (Attention Hammer): Pembuka video yang mengejutkan atau provokatif.
-  - C (Craving Trigger): Kalimat yang menyentuh emosi audiens (frustrasi, iri hati, ketakutan).
-  - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia.
-  - A (Action Word): Tutup dengan CTA yang WAJIB menggunakan Power Word "TERUNGKAP".
+  Gunakan formula A.C.T.A (Attention, Craving, Tension, Action):
+  - A (Attention Hammer): Pembuka mengejutkan atau provokatif.
+  - C (Craving Trigger): Sentuh emosi audiens (frustrasi, iri, takut, harapan).
+  - T (Tension Gap): Buat penasaran dengan janji rahasia.
+  - A (Action Word): Tutup dengan CTA wajib mengandung kata "TERUNGKAP".
 
-  Contoh:
-  Input Produk: Kursus Public Speaking
-  Output yang diharapkan:
+  Input Produk: "${prod}"
+  Output harus JSON:
   {
-    "vo": "MULUT TERKUNCI SAAT DI PANGGUNG? Bayangkan jika kamu bisa mengubah keringat dingin jadi tepuk tangan meriah. Ada satu teknik pernapasan 3 detik yang dipakai para CEO untuk menghilangkan demam panggung seketika. Teknik itu akan TERUNGKAP di kursus ini.",
-    "caption": "Jangan lagi buang waktu grogi di panggung! Temukan rahasia yang bikin kamu percaya diri. Link di bio untuk tahu caranya! #publicspeaking #belajarpresentasi #suksesmuda #terungkap #rahasia"
+    "vo": "...",
+    "caption": "..."
   }
-  
-  SEKARANG, TUGAS ANDA:
-  Gunakan formula dan contoh di atas untuk produk: "${prod}".
-  Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT UNTUK GAYA HALUS (PROFESIONAL) ---
+// --- PROMPT UNTUK GAYA FORMULA HALUS (ISI = VSOFT) ---
 const createHalusPrompt = (prod) => `
-  Anda adalah seorang Copywriter Profesional dan Brand Strategist.
-  Tugas Anda adalah membuat konten yang elegan, persuasif, dan profesional dalam format JSON.
+  Anda adalah seorang Copywriter Viral yang elegan dan persuasif. 
+  Gunakan formula HALUS (isi: VSOFT → Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON:
+  - V (Vivid Problem): Gambarkan masalah nyata dengan bahasa yang mudah dibayangkan.
+  - S (Story Touch): Sisipkan sedikit narasi/imajinasi audiens.
+  - O (Offer Clarity): Tampilkan produk sebagai solusi jelas.
+  - FT (Friendly CTA): Ajakan ramah + hashtag relevan.
 
-  Gunakan formula P.A.V.E (Problem, Agitate, Value, Encourage):
-  - P (Problem): Mulai dengan menyebutkan masalah audiens secara halus dan penuh empati.
-  - A (Agitate): Sentuh sedikit dampak dari masalah tersebut.
-  - V (Value): Tawarkan produk Anda sebagai solusi yang bernilai dan berkelas.
-  - E (Encourage): Tutup dengan ajakan yang ramah dan tidak memaksa untuk mempelajari lebih lanjut.
-
-  Contoh:
-  Input Produk: Kursus Public Speaking
-  Output yang diharapkan:
+  Input Produk: "${prod}"
+  Output harus JSON:
   {
-    "vo": "Apakah Anda merasa gugup saat harus berbicara di depan banyak orang? Rasa tidak percaya diri ini bisa menghambat potensi karier Anda. Bayangkan jika Anda bisa menyampaikan ide dengan tenang dan meyakinkan. Temukan caranya di dalam kursus public speaking kami.",
-    "caption": "Tingkatkan kepercayaan diri dan kuasai panggung. Kursus kami dirancang untuk membantu Anda berbicara dengan lebih efektif dan profesional. Klik link di bio untuk mempelajari selengkapnya. #publicspeaking #personalgrowth #karier #komunikasi #sukses"
+    "vo": "...",
+    "caption": "..."
   }
-  
-  SEKARANG, TUGAS ANDA:
-  Gunakan formula dan contoh di atas untuk produk: "${prod}".
-  Jawab hanya dalam format JSON.
 `;
-
 
 // --- FUNGSI UTAMA NETLIFY ---
 export async function handler(event) {
@@ -53,15 +40,14 @@ export async function handler(event) {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'Kunci API (OPENAI_API_KEY) belum diatur di Netlify.' }) };
+    return { statusCode: 500, body: JSON.stringify({ error: 'OPENAI_API_KEY belum diatur di Netlify.' }) };
   }
-  
+
   const apiModel = process.env.OPENAI_MODEL || 'gpt-4o-mini';
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
   try {
     const { product, mode, style = 'acta' } = JSON.parse(event.body);
-    
     if (!product) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
     }
@@ -82,7 +68,7 @@ export async function handler(event) {
       body: JSON.stringify({
         model: apiModel,
         messages: [
-          { role: 'system', content: 'You are a professional content generator who always responds in valid Indonesian language JSON format.' },
+          { role: 'system', content: 'You are a professional content generator who always responds in valid Indonesian JSON format.' },
           { role: 'user', content: finalPrompt }
         ],
         response_format: { type: "json_object" },
@@ -93,31 +79,19 @@ export async function handler(event) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Error dari OpenAI:', errorData);
-      const errorMessage = errorData.error?.message || 'Terjadi kesalahan pada API OpenAI.';
-      return { statusCode: response.status, body: JSON.stringify({ error: `Gagal memanggil API OpenAI: ${errorMessage}` }) };
+      return { statusCode: response.status, body: JSON.stringify({ error: errorData.error?.message }) };
     }
 
     const data = await response.json();
     const content = JSON.parse(data.choices[0].message.content);
 
     let result = {};
-    if (mode === 'both') {
-      result = { vo: content.vo, caption: content.caption };
-    } else if (mode === 'vo') {
-      result = { vo: content.vo };
-    } else if (mode === 'caption') {
-      result = { caption: content.caption };
-    }
+    if (mode === 'both') result = { vo: content.vo, caption: content.caption };
+    else if (mode === 'vo') result = { vo: content.vo };
+    else if (mode === 'caption') result = { caption: content.caption };
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result),
-    };
-
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) };
   } catch (error) {
-    console.error('Terjadi error di Netlify Function:', error);
-    return { statusCode: 500, body: JSON.stringify({ error: `Terjadi kesalahan internal: ${error.message}` }) };
+    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
 }
