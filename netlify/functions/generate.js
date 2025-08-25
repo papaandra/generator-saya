@@ -1,18 +1,18 @@
-// --- PROMPT UNTUK GAYA A.C.T.A. (VIRAL) ---
+// --- PROMPT BARU UNTUK GAYA ACTA (LEBIH TAJAM) ---
 const createActaPrompt = (prod) => `
   Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
-  Anda harus menggunakan formula A.C.T.A (Attention, Craving, Tension, Action).
-  - A (Attention Hammer): Pembuka video yang mengejutkan, provokatif, atau kontroversial. Tujuannya adalah memecah pola scroll dan memaksa audiens berhenti dalam 1 detik pertama.
-  - C (Craving Trigger): Kalimat yang menyentuh emosi audiens (frustrasi, iri hati, ketakutan).
-  - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia.
-  - A (Action Word): Tutup dengan CTA yang TEGAS LUGAS dan mengarah ke keranjang kuning.
+  Anda WAJIB menggunakan formula "kasar" berikut untuk hook video TikTok:
+  1.  **Tombol Pattern (Play Grabber):** Gunakan kalimat pembuka yang menginterupsi scroll. Contoh: "STOP SCROLLING!", "JANGAN SKIP KALAU KAMU...", "BAYANGIN INI TERJADI KE KAMU...".
+  2.  **Psychological Trigger (Forced Engagement):** Gunakan FOMO atau sentuh pain point yang relevan. Contoh: "90% orang gagal karena...", "Kalau kamu skip, kamu bakal nyesel...".
+  3.  **Curiosity Gap (Click Magnet):** Tampilkan informasi setengah untuk membuat penasaran. Contoh: "Rahasianya cuma 1 hal kecil...", "Kebanyakan orang salah langkah di sini...".
+  4.  **Power Word (Buy Trigger):** Sisipkan salah satu kata pemicu aksi seperti "Rahasia", "Terbukti", "Eksklusif", dan akhiri dengan CTA yang jelas ke keranjang kuning.
 
   Contoh:
   Input Produk: Sikat Gigi
   Output yang diharapkan:
   {
-    "vo": "STOP! Jangan sikat gigi dengan cara ini lagi. Gak pede ngobrol karena napas bau naga? Ternyata, cara sikat gigi yang diajarkan sejak SD itu salah. Buruan aja di keranjang kuning mumpung lagi promo.",
-    "caption": "Punya masalah napas bau? Klik keranjang kuning buat solusinya! #sikatgigi #napasnaga #kesehatanmulut #terungkap #viral #fyp"
+    "vo": "STOP SCROLLING! 90% orang gak sadar kalau cara sikat gigi mereka salah. Hasilnya, napas tetap bau dan karang gigi numpuk. Rahasia gigi bersih dan napas wangi ada di satu trik eksklusif yang ada di sikat gigi ini. Cek keranjang kuning sekarang!",
+    "caption": "Merasa sikat gigi udah bener tapi napas masih bau? Mungkin cara kamu salah. Temukan solusi terbuktinya di keranjang kuning! #sikatgigi #napasbau #gigiputih #racuntiktok"
   }
   
   SEKARANG, TUGAS ANDA:
@@ -57,7 +57,7 @@ const createGenZPrompt = (prod) => `
   - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul (POV, spill, vibes).
   - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
   - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
-  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman, dan mengarah ke keranjang kuning.
+  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
 
   Contoh:
   Input Produk: Sikat Gigi
