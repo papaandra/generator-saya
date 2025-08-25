@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Fungsi Netlify</title>
+</head>
+<body>
+    <h1>Tes Fungsi Netlify</h1>
+    <button id="testButton">Jalankan Fungsi</button>
+    <p id="result">Hasil akan muncul di sini...</p>
+
+    <script>
+        document.getElementById('testButton').addEventListener('click', async () => {
+            const resultP = document.getElementById('result');
+            resultP.textContent = 'Memanggil fungsi...';
+            try {
+                const response = await fetch('/.netlify/functions/tes');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                resultP.textContent = `Sukses! Pesan dari server: ${data.message}`;
+            } catch (error) {
+                resultP.textContent = `Gagal: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
