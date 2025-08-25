@@ -5,7 +5,7 @@ const createActaPrompt = (prod) => `
   - A (Attention Hammer): Pembuka video yang mengejutkan atau provokatif.
   - C (Craving Trigger): Kalimat yang menyentuh emosi audiens (frustrasi, iri hati, ketakutan).
   - T (Tension Gap): Menciptakan rasa penasaran dengan menjanjikan sebuah rahasia.
-  - A (Action Word): Tutup dengan CTA yang WAJIB menggunakan Power Word "TERUNGKAP" dan mengarah ke keranjang kuning.
+  - A (Action Word): Tutup dengan CTA yang WAJIB menggunakan Power Word "BURUAN" dan mengarah ke keranjang kuning.
 
   Contoh:
   Input Produk: Kursus Public Speaking
