@@ -394,13 +394,3 @@ export async function handler(event) {
     return { statusCode: 500, body: JSON.stringify({ error: `Terjadi kesalahan internal: ${error.message}` }) };
   }
 }
-// Log detail penggunaan token (buat cek di Netlify logs)
-if (data.usage) {
-  console.log("🔎 Token usage:", {
-    prompt_tokens: data.usage.prompt_tokens,
-    completion_tokens: data.usage.completion_tokens,
-    total_tokens: data.usage.total_tokens
-  });
-} else {
-  console.log("⚠️ Tidak ada data. Cek response format:", data);
-}
