@@ -1,67 +1,65 @@
-// --- PROMPT UNTUK GAYA ACTA (KASAR, NAMPAAR, ANTI TEMPLATE) ---
+// --- PROMPT BARU UNTUK GAYA ACTA (LEBIH TAJAM + ANTI-MONOTON) ---
 const createActaPrompt = (prod) => `
-Anda adalah seorang Viral Hook Generator yang menciptakan konten hook KASAR (provokatif, nampar, frontal) dalam format JSON.
+  Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
+  Anda WAJIB menggunakan formula "kasar" berikut untuk hook video TikTok:
+  1.  **Tombol Pattern (Play Grabber):** Gunakan kalimat pembuka yang menginterupsi scroll. Contoh: "STOP SCROLLING!", "JANGAN SKIP KALAU KAMU...", "BAYANGIN INI TERJADI KE KAMU...".
+  2.  **Psychological Trigger (Forced Engagement):** Gunakan FOMO atau sentuh pain point yang relevan. Contoh: "90% orang gagal karena...", "Kalau kamu skip, kamu bakal nyesel...".
+  3.  **Curiosity Gap (Click Magnet):** Tampilkan informasi setengah untuk membuat penasaran. Contoh: "Rahasianya cuma 1 hal kecil...", "Kebanyakan orang salah langkah di sini...".
+  4.  **Power Word (Buy Trigger):** Sisipkan salah satu kata pemicu aksi seperti "Rahasia", "Terbukti", "Eksklusif", dan akhiri dengan CTA yang jelas ke keranjang kuning.
 
-Gunakan formula ACTA:
-- A (Attention Hammer): Kalimat pertama = kasar, frontal, bikin kaget. 
-  • Bisa sindiran: "Lo kira murah itu untung? Salah!"
-  • Bisa ancaman: "Pakai ini salah, siap-siap nyesel!"
-  • Bisa teriakan: "Gila! Kok masih ada yang...!"
-  • Fakta pahit: "Banyak yang bangkrut gara-gara salah pilih..."
-  ❌ Larangan pakai: "JANGAN SKIP", "STOP SCROLLING", "XX% orang", "KALAU KAMU".
-- C (Craving Trigger): Sentuh rasa frustasi, penyesalan, atau iri. Bikin audiens merasa diserang/tersindir.
-- T (Tension Gap): Singgung rahasia atau kesalahan kecil yang bikin penasaran.
-- A (Action Word): Tutup dengan CTA agresif + power word, arahkan ke keranjang kuning.
+  /* Variasi & Anti-Monoton (WAJIB DIPATUHI):
+     - Jangan memakai pola pembuka yang sama berulang-ulang.
+     - Hindari membuka dengan frasa klise yang terlalu sering muncul:
+       "JANGAN SKIP", "STOP SCROLLING", "90% orang", "Masih ...", "Kalau kamu ..."
+     - Pilih variasi pembuka yang keras/“kasar” lain: sindiran, ancaman, fakta pahit, atau mini-drama.
+     - Sertakan minimal 1 detail spesifik dari produk "${prod}" agar tidak generik.
+     - Total 4 kalimat, ±14–15 detik (ramah TTS). */
 
-Aturan:
-- 4 kalimat pendek, durasi total 14–15 detik.
-- Bahasa to the point, keras, tanpa basa-basi.
-- Harus sebut 1 detail nyata dari produk "${prod}".
-
-Contoh (ilustrasi):
-Input Produk: Sepatu Cowok
-Output yang diharapkan:
-{
-  "vo": "Masih bangga pake sepatu murahan? Nggak heran tampilannya keliatan lusuh tiap nongkrong. Ada material kulit sintetis premium yang bikin look langsung naik kelas. Buka keranjang kuning sekarang juga!",
-  "caption": "Lo mau dibilang kelas dua gara-gara sepatu lusuh? Upgrade style lo sekarang. #sepatucowok #OOTD #keranjangkuning #viral #upgrade"
-}
-
-SEKARANG, TUGAS ANDA:
-Buat hook kasar ala ACTA untuk produk: "${prod}".
-Jawab hanya dalam format JSON.
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "STOP SCROLLING! 90% orang gak sadar kalau cara sikat gigi mereka salah. Hasilnya, napas tetap bau dan karang gigi numpuk. Rahasia gigi bersih dan napas wangi ada di satu trik eksklusif yang ada di sikat gigi ini. Cek keranjang kuning sekarang!",
+    "caption": "Merasa sikat gigi udah bener tapi napas masih bau? Mungkin cara kamu salah. Temukan solusi terbuktinya di keranjang kuning! #sikatgigi #napasbau #gigiputih #racuntiktok"
+  }
+  
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT UNTUK GAYA HALUS (VSOFT, ANTI TEMPLATE) ---
+// --- PROMPT UNTUK GAYA HALUS (VSOFT + ANTI-MONOTON) ---
 const createHalusPrompt = (prod) => `
-Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
-Gunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
+  Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
+  Anda harus menggunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
+  
+  PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
 
-ATURAN:
-- Dilarang membuka dengan "Apakah kamu..." atau "Bayangkan...".
-- Gunakan pembuka yang lebih segar:
-  • Pernyataan reflektif: "Kadang kita nggak sadar kalau..."
-  • Cerita kecil: "Setiap pagi, banyak orang ngalamin hal sama..."
-  • Observasi personal: "Gue sering lihat temen gue ngalamin ini..."
-- Kalimat harus mengalir halus, seperti percakapan santai tapi tetap classy.
-- Hindari template tanya + bayangkan. Variasi gaya bahasa tiap kalimat.
-- Tetap 4 kalimat (±14–15 detik, cocok TTS).
-- Harus menyinggung 1 detail spesifik dari produk "${prod}".
-- Tutup dengan CTA ramah yang mengarah ke keranjang kuning.
+  Berikut adalah definisi setiap elemen formula VSOFT:
+  - V (Vivid Problem): Gambarkan masalah nyata dengan bahasa yang mudah dibayangkan.
+  - S (Story Touch): Sisipkan sedikit narasi atau imajinasi audiens, gunakan gaya bahasa yang personal (aku, kamu).
+  - O (Offer Clarity): Tampilkan produk sebagai solusi yang jelas dan bernilai.
+  - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
 
-Contoh:
-Input Produk: Skincare
-Output yang diharapkan:
-{
-  "vo": "Setiap malam kulit ketemu debu, polusi, dan sisa makeup yang nyangkut di pori. Kalau dibiarkan, muka gampang kusam dan jerawatan. Serum ini punya kandungan niacinamide yang langsung nenangin kulit setelah dibersihin. Klik keranjang kuning buat jaga kulit tetap sehat tiap hari.",
-  "caption": "Kulit sehat nggak butuh ribet, cuma butuh produk yang tepat. Yuk rawat diri mulai sekarang. #skincare #selflove #keranjangkuning #glowup #vsoft"
-}
+  /* Variasi & Anti-Monoton (WAJIB DIPATUHI):
+     - Hindari selalu membuka dengan "Apakah kamu...", "Kadang kita...", atau "Bayangkan...".
+     - Gunakan variasi pembuka elegan lain: observasi ringan, cerita kecil, refleksi personal, atau pertanyaan halus.
+     - Sertakan minimal 1 detail spesifik dari produk "${prod}". */
 
-SEKARANG, TUGAS ANDA:
-Gunakan formula di atas untuk produk: "${prod}".
-Jawab hanya dalam format JSON.
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Apakah Anda sering merasa gigi belum bersih sempurna? Sisa kuman bisa menyebabkan masalah gusi. Bayangkan jika setiap sikat gigi bisa terasa seperti pembersihan di dokter gigi. Koleksi kami sudah tersedia di keranjang kuning.",
+    "caption": "Untuk senyum yang sehat dan percaya diri, kebersihan gigi adalah kunci. Sikat gigi kami didesain dengan teknologi terbaru untuk membersihkan hingga ke sela terdalam. Jadikan kebersihan mulut sebagai prioritas. Cek keranjang kuning sekarang. #perawatangigi #sikatgigipremium #senyumsehat #kesehatanmulut"
+  }
+  
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT BARU UNTUK GAYA GEN Z (VIBE) ---
+// --- PROMPT BARU UNTUK GAYA GEN Z (VIBE + ANTI-MONOTON) ---
 const createGenZPrompt = (prod) => `
   Anda adalah seorang Viral Content Creator yang autentik, santai, dan menggunakan gaya bahasa anak muda (Gen Z).
   Anda harus menggunakan formula VIBE (Vibes Check, Instant Relevancy, Brevity & Punchline, Easy Action) untuk membuat konten dalam format JSON.
@@ -73,6 +71,10 @@ const createGenZPrompt = (prod) => `
   - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
   - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
   - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
+
+  /* Variasi & Anti-Monoton (WAJIB DIPATUHI):
+     - Jangan selalu membuka dengan pola yang sama (misal "Abis ...", "POV ...").
+     - Variasikan diksi gaul & ritme kalimat, tetap natural & punchy. */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -87,7 +89,7 @@ const createGenZPrompt = (prod) => `
   Jawab hanya dalam format JSON.
 `;
 
-/* ===================== 4 FORMULA BARU ===================== */
+/* ===================== 4 FORMULA BARU (variatif by design) ===================== */
 
 // --- HABIT (Habit → Relate → Twist → Reveal) ---
 const createHabitPrompt = (prod) => `
@@ -192,7 +194,7 @@ export async function handler(event) {
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
   try {
-    const { product, mode, style = 'acta' } = JSON.parse(event.body);
+    const { product, mode, style = 'acta' } = JSON.parse(event.body || "{}");
     
     if (!product) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
@@ -215,6 +217,9 @@ export async function handler(event) {
       finalPrompt = createActaPrompt(product);
     }
 
+    // Dorong variasi khusus untuk 3 formula awal (tanpa mengubah struktur)
+    const needsMoreVar = (style === 'acta' || style === 'halus' || style === 'genz');
+
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -228,14 +233,16 @@ export async function handler(event) {
           { role: 'user', content: finalPrompt }
         ],
         response_format: { type: "json_object" },
-        temperature: 0.9,
-        max_tokens: 250,
+        temperature: needsMoreVar ? 1.0 : 0.9,
+        top_p: needsMoreVar ? 0.92 : 1.0,
+        presence_penalty: needsMoreVar ? 0.6 : 0.0,
+        frequency_penalty: needsMoreVar ? 0.4 : 0.0,
+        max_tokens: 260,
       }),
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error dari OpenAI:', errorData);
+      const errorData = await response.json().catch(() => ({}));
       const errorMessage = errorData.error?.message || 'Terjadi kesalahan pada API OpenAI.';
       return { statusCode: response.status, body: JSON.stringify({ error: `Gagal memanggil API OpenAI: ${errorMessage}` }) };
     }
@@ -259,7 +266,6 @@ export async function handler(event) {
     };
 
   } catch (error) {
-    console.error('Terjadi error di Netlify Function:', error);
     return { statusCode: 500, body: JSON.stringify({ error: `Terjadi kesalahan internal: ${error.message}` }) };
   }
 }
