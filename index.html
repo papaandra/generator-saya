@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🔥 Viral Hook Generator — 15s TTS</title>
-  <meta name="description" content="Generate VO (4 kalimat ~15 detik) + Caption & Hashtag dengan Formula Matrix Viral Hook." />
+  <meta name="description" content="Generate VO (4 kalimat ~15 detik) + Caption & Hashtag dengan berbagai formula viral." />
   <style>
     * { box-sizing: border-box; }
     :root { --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e5e7eb; --accent:#22c55e; }
@@ -23,7 +23,7 @@
     .card {
       background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       border: 1px solid rgba(148,163,184,.15);
-      border-radius: 16px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      border-radius: 16px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
     .row { display:flex; gap:10px; }
     input[type="text"] {
@@ -64,52 +64,26 @@
       -moz-appearance: none;
       appearance: none;
       cursor:pointer;
-      min-width: 140px;
+      min-width: 160px;
     }
-    .row > div {
-      flex: 0 0 auto;
+    .row > div { flex: 0 0 auto; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .row { flex-wrap: wrap; }
+      .row input[type="text"], .row select, .row button {
+        width: 100%; min-width: unset; margin-bottom: 8px;
+      }
+      .row > div { flex: 1; width: 100%; min-width: unset; margin-bottom: 8px; }
+      .row button { margin-top: 2px; }
     }
 
-    /* --- PERBAIKAN RESPONSIVE UNTUK LAYOUT UTAMA --- */
-    @media (max-width: 600px) {
-      .row {
-        flex-wrap: wrap;
-      }
-      .row input[type="text"],
-      .row select,
-      .row button {
-        width: 100%;
-        min-width: unset;
-        margin-bottom: 8px; /* Tambah jarak antar elemen */
-      }
-      .row > div {
-        flex: 1;
-        width: 100%;
-        min-width: unset;
-        margin-bottom: 8px;
-      }
-      .row button {
-        margin-top: 2px;
-      }
-    }
-    
-    /* --- PERBAIKAN RESPONSIVE UNTUK HEADER --- */
     .formula-mobile { display: none; }
     @media (max-width: 600px) {
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-      }
+      .header { flex-direction: column; align-items: flex-start; gap: 5px; }
       .formula-desktop { display: none; }
-      .formula-mobile { 
-        display: block; 
-        font-size:12px; 
-        color:var(--muted); 
-      }
-      .header h1 {
-        font-size: 24px;
-      }
+      .formula-mobile { display: block; font-size:12px; color:var(--muted); }
+      .header h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -117,8 +91,10 @@
   <div class="app">
     <div class="header">
       <h1>🔥 Viral Hook Generator <span class="badge">15s TTS</span></h1>
-      <div class="formula-desktop" style="font-size:12px;color:#9ca3af">Formula Matrix: Pattern • Trigger • Gap • Power Word + CTA</div>
-      <div class="formula-mobile">Formula: ACTA / VSOFT / VIBE</div>
+      <div class="formula-desktop" style="font-size:12px;color:#9ca3af">
+        Pilih formula: ACTA • HALUS(VSOFT) • VIBE • HABIT • RELATE • MINOR • HACK
+      </div>
+      <div class="formula-mobile">Formula: ACTA / HALUS / VIBE / HABIT / RELATE / MINOR / HACK</div>
     </div>
 
     <div class="card">
@@ -127,8 +103,12 @@
         <div>
           <select id="styleSelector">
             <option value="acta">🔥 ACTA (Viral)</option>
-            <option value="halus">✨ HALUS (Profesional)</option>
+            <option value="halus">✨ HALUS (VSOFT)</option>
             <option value="genz">😎 VIBE (Gen Z)</option>
+            <option value="habit">☕ HABIT (Rutinitas)</option>
+            <option value="relate">🤝 RELATE (Cuma Aku/Kalian Juga?)</option>
+            <option value="minor">😅 MINOR (Sepele Tapi Nyebelin)</option>
+            <option value="hack">🛠️ HACK (Life Hack)</option>
           </select>
         </div>
         <button id="genBtn">Generate</button>
@@ -167,6 +147,16 @@
     const $ = (id) => document.getElementById(id);
     const state = { lastProduct: "", lastVO: "", lastCaption: "" };
 
+    // Persist pilihan formula biar keinget
+    const savedStyle = localStorage.getItem("vhg-style");
+    if (savedStyle) {
+      const sel = document.getElementById("styleSelector");
+      if ([...sel.options].some(o => o.value === savedStyle)) sel.value = savedStyle;
+    }
+    document.getElementById("styleSelector").addEventListener("change", (e) => {
+      localStorage.setItem("vhg-style", e.target.value);
+    });
+
     async function callApi(route, payload) {
       const res = await fetch(route, {
         method: "POST",
@@ -174,12 +164,10 @@
         body: JSON.stringify(payload)
       });
       if (!res.ok) {
-        // Coba parsing error dari JSON yang dikirim server
         try {
-            const errJson = await res.json();
-            throw new Error(errJson.error || "Terjadi kesalahan pada server.");
+          const errJson = await res.json();
+          throw new Error(errJson.error || "Terjadi kesalahan pada server.");
         } catch(e) {
-          // Jika gagal parsing, tampilkan status text
           throw new Error(res.statusText || ("HTTP Error " + res.status));
         }
       }
@@ -200,7 +188,7 @@
       const product = $("product").value.trim();
       if (!product) return alert("Isi nama produk dulu ya.");
       state.lastProduct = product;
-      
+
       const style = $("styleSelector").value;
 
       setLoading(true, $("vo"));
@@ -223,7 +211,7 @@
     async function regen(kind) {
       const product = state.lastProduct || $("product").value.trim();
       if (!product) return alert("Isi nama produk dulu ya.");
-      
+
       const style = $("styleSelector").value;
 
       setLoading(true, kind === "vo" ? $("vo") : $("caption"));
