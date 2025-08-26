@@ -1,3 +1,13 @@
+// ===== Util kecil untuk cek opener di server =====
+function extractOpenerText(vo = "") {
+  const firstSentence = (vo || "").split(/[.!?]/)[0] || "";
+  return firstSentence.trim().split(/\s+/).slice(0,4).join(" ").toLowerCase();
+}
+function violatesAvoidList(vo, avoidList = []) {
+  const opener = extractOpenerText(vo);
+  return avoidList.some(s => opener.startsWith((s || "").toLowerCase()));
+}
+
 // --- ACTA (LEBIH TAJAM + ANTI-MONOTON + ANTI-ULANG) ---
 const createActaPrompt = (prod, avoidList = []) => `
   Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
@@ -8,10 +18,10 @@ const createActaPrompt = (prod, avoidList = []) => `
   4.  **Power Word (Buy Trigger):** Sisipkan salah satu kata pemicu aksi seperti "Rahasia", "Terbukti", "Eksklusif", dan akhiri dengan CTA yang jelas ke keranjang kuning.
 
   /* Variasi & Anti-Monoton:
-     - Hindari pola pembuka berulang seperti: "JANGAN SKIP", "STOP SCROLLING", "90% orang", "Masih ...", "Kalau kamu ...".
-     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}
-     - Pilih variasi pembuka keras/“kasar” lain: sindiran, ancaman, fakta pahit, atau mini-drama.
-     - Sertakan minimal 1 detail spesifik dari produk "${prod}" (fitur/bahan/hasil/sensasi).
+     - Hindari pola pembuka klise: "JANGAN SKIP", "STOP SCROLLING", "90% orang", "Masih ...", "Kalau kamu ...".
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     - Boleh sindiran, ancaman, fakta pahit, mini-drama.
+     - Sertakan ≥1 detail spesifik dari produk "${prod}".
      - 4 kalimat, total ±14–15 detik (ramah TTS). */
 
   Contoh:
@@ -41,10 +51,10 @@ const createHalusPrompt = (prod, avoidList = []) => `
   - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
 
   /* Variasi & Anti-Monoton:
-     - Hindari pembuka klise berulang seperti: "Apakah kamu...", "Kadang kita...", "Bayangkan...".
-     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}
-     - Gunakan alternatif elegan: observasi ringan, cerita kecil, refleksi personal, atau pertanyaan halus.
-     - Sertakan 1 detail spesifik dari produk "${prod}". */
+     - Hindari pembuka berulang: "Apakah kamu...", "Kadang kita...", "Bayangkan...".
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     - Gunakan alternatif: observasi ringan, cerita kecil, refleksi personal, pertanyaan halus.
+     - Sertakan ≥1 detail spesifik dari produk "${prod}". */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -59,7 +69,7 @@ const createHalusPrompt = (prod, avoidList = []) => `
   Jawab hanya dalam format JSON.
 `;
 
-// --- VIBE (Gen Z) + ANTI-MONOTON + ANTI-ULANG (ringan) ---
+// --- VIBE (Gen Z) + ANTI-MONOTON + ANTI-ULANG ---
 const createGenZPrompt = (prod, avoidList = []) => `
   Anda adalah seorang Viral Content Creator yang autentik, santai, dan menggunakan gaya bahasa anak muda (Gen Z).
   Anda harus menggunakan formula VIBE (Vibes Check, Instant Relevancy, Brevity & Punchline, Easy Action) untuk membuat konten dalam format JSON.
@@ -70,11 +80,11 @@ const createGenZPrompt = (prod, avoidList = []) => `
   - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul (POV, spill, vibes).
   - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
   - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
-  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
+  - E (Easy Action): CTA santai ke keranjang kuning.
 
   /* Variasi & Anti-Monoton:
      - Hindari repetisi pembuka seperti "Abis ...", "POV ...".
-     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      - Variasikan diksi gaul & ritme kalimat, tetap punchy. */
 
   Contoh:
@@ -90,16 +100,20 @@ const createGenZPrompt = (prod, avoidList = []) => `
   Jawab hanya dalam format JSON.
 `;
 
-/* ===================== 4 FORMULA TAMBAHAN (variatif by design) ===================== */
+/* ===================== 4 FORMULA TAMBAHAN (sekarang juga anti-ulang) ===================== */
 
 // --- HABIT (Habit → Relate → Twist → Reveal) ---
-const createHabitPrompt = (prod) => `
+const createHabitPrompt = (prod, avoidList = []) => `
   Anda adalah pembuat hook kategori Kebiasaan & Rutinitas Harian.
   Gunakan formula: Habit → Relate → Twist → Reveal. Balas dalam JSON valid.
   - Habit: mulai dari kebiasaan harian yang umum.
   - Relate: ajak audiens merasa "sama banget".
   - Twist: beri detail unik/cepat (tips/ritual/alat sederhana).
   - Reveal: ungkap solusi singkat terkait produk, arahkan ke keranjang kuning.
+
+  /* Anti-ulang pembuka (riwayat):
+     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     Usahakan pembuka tiap hasil berbeda ritme/diksi. */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -115,13 +129,17 @@ const createHabitPrompt = (prod) => `
 `;
 
 // --- RELATE (Relate → Confess → Engage → CTA) ---
-const createRelatePrompt = (prod) => `
+const createRelatePrompt = (prod, avoidList = []) => `
   Anda adalah pembuat hook "Cuma aku atau kalian juga...".
   Gunakan formula: Relate → Confess → Engage → CTA. Balas dalam JSON valid.
   - Relate: mulai dengan "cuma aku atau kalian juga..."
   - Confess: akui kebiasaan kecil/guilty pleasure terkait produk.
   - Engage: pancing komentar (tim A/B, setuju/nggak).
   - CTA: ajak coba/cek produk di keranjang kuning.
+
+  /* Anti-ulang pembuka (riwayat):
+     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     Boleh variasi: "gue doang apa...", "sering gak sih...", dll. */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -137,13 +155,17 @@ const createRelatePrompt = (prod) => `
 `;
 
 // --- MINOR (Pain → Exaggerate → Relieve → Solution) ---
-const createMinorPrompt = (prod) => `
+const createMinorPrompt = (prod, avoidList = []) => `
   Anda adalah pembuat hook "Masalah sepele tapi nyebelin".
   Gunakan formula: Pain → Exaggerate → Relieve → Solution. Balas dalam JSON valid.
   - Pain: sebutkan masalah kecil sehari-hari.
   - Exaggerate: lebay-in sedikit (komedi ringan).
   - Relieve: gambarkan mood yang keburu rusak.
   - Solution: tampilkan produk sebagai solusi cepat, arahkan ke keranjang kuning.
+
+  /* Anti-ulang pembuka (riwayat):
+     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     Variasikan diksi keluhan: "paling ngeselin", "bikin geregetan", "auto bad mood", dst. */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -159,13 +181,17 @@ const createMinorPrompt = (prod) => `
 `;
 
 // --- HACK (Surprise → Reveal → Hack → Invitation) ---
-const createHackPrompt = (prod) => `
+const createHackPrompt = (prod, avoidList = []) => `
   Anda adalah pembuat hook Life Hack/temuan tidak sengaja.
   Gunakan formula: Surprise → Reveal → Hack → Invitation. Balas dalam JSON valid.
   - Surprise: "gak sengaja nemu..." / ekspresi takjub.
   - Reveal: sebut produknya.
   - Hack: fungsi unik/tak terduga (quick win).
   - Invitation: ajak audiens untuk coba, arahkan ke keranjang kuning.
+
+  /* Anti-ulang pembuka (riwayat):
+     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     Variasikan diksi takjub: "kaget banget", "baru ngeh", "gila sih", "ternyata...". */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -196,7 +222,6 @@ export async function handler(event) {
 
   try {
     const { product, mode, style = 'acta', avoidOpeners = [] } = JSON.parse(event.body || "{}");
-    
     if (!product) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
     }
@@ -207,66 +232,66 @@ export async function handler(event) {
     } else if (style === 'genz') {
       finalPrompt = createGenZPrompt(product, avoidOpeners);
     } else if (style === 'habit') {
-      finalPrompt = createHabitPrompt(product);
+      finalPrompt = createHabitPrompt(product, avoidOpeners);
     } else if (style === 'relate') {
-      finalPrompt = createRelatePrompt(product);
+      finalPrompt = createRelatePrompt(product, avoidOpeners);
     } else if (style === 'minor') {
-      finalPrompt = createMinorPrompt(product);
+      finalPrompt = createMinorPrompt(product, avoidOpeners);
     } else if (style === 'hack') {
-      finalPrompt = createHackPrompt(product);
+      finalPrompt = createHackPrompt(product, avoidOpeners);
     } else {
       finalPrompt = createActaPrompt(product, avoidOpeners);
     }
 
-    const needsMoreVar = (style === 'acta' || style === 'halus' || style === 'genz');
+    // semua style kita kasih variasi ringan (biar nggak template)
+    const needsMoreVar = true;
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: apiModel,
-        messages: [
-          { role: 'system', content: 'You are a professional content generator who always responds in valid Indonesian language JSON format.' },
-          { role: 'user', content: finalPrompt }
-        ],
-        response_format: { type: "json_object" },
-        temperature: needsMoreVar ? 1.0 : 0.9,
-        top_p: needsMoreVar ? 0.92 : 1.0,
-        presence_penalty: needsMoreVar ? 0.6 : 0.0,
-        frequency_penalty: needsMoreVar ? 0.4 : 0.0,
-        max_tokens: 260,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const errorMessage = errorData.error?.message || 'Terjadi kesalahan pada API OpenAI.';
-      return { statusCode: response.status, body: JSON.stringify({ error: `Gagal memanggil API OpenAI: ${errorMessage}` }) };
+    async function callOpenAI(prompt) {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+          model: apiModel,
+          messages: [
+            { role: 'system', content: 'You are a professional content generator who always responds in valid Indonesian language JSON format.' },
+            { role: 'user', content: prompt }
+          ],
+          response_format: { type: "json_object" },
+          temperature: needsMoreVar ? 1.0 : 0.9,
+          top_p: needsMoreVar ? 0.92 : 1.0,
+          presence_penalty: 0.6,
+          frequency_penalty: 0.35,
+          max_tokens: 260,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(()=>({}));
+        throw new Error(err.error?.message || `OpenAI error ${res.status}`);
+      }
+      const data = await res.json();
+      let content = {};
+      try { content = JSON.parse(data.choices[0].message.content || "{}"); } catch {}
+      return content;
     }
 
-    const data = await response.json();
-    const content = JSON.parse(data.choices[0].message.content || "{}");
+    // Panggilan pertama
+    let content = await callOpenAI(finalPrompt);
 
-    let result = {};
-    if (mode === 'both') {
-      result = { vo: content.vo, caption: content.caption };
-    } else if (mode === 'vo') {
-      result = { vo: content.vo };
-    } else if (mode === 'caption') {
-      result = { caption: content.caption };
-    } else {
-      // default fallback both
-      result = { vo: content.vo, caption: content.caption };
+    // Server-side guard: kalau opener masih melanggar, 1x retry dengan instruksi tambahan
+    if (content?.vo && violatesAvoidList(content.vo, avoidOpeners)) {
+      const extra = `
+      Penting: Kalimat pertama VO Anda terdeteksi mirip pembuka yang dilarang.
+      Ulangi output dengan PEMBUKA BERBEDA dari daftar berikut: ${avoidOpeners.map(s=>`"${s}"`).join(", ")}.
+      `;
+      content = await callOpenAI(finalPrompt + "\n" + extra);
     }
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result),
-    };
+    const result =
+      mode === 'vo' ? { vo: content.vo } :
+      mode === 'caption' ? { caption: content.caption } :
+      { vo: content.vo, caption: content.caption };
+
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) };
 
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: `Terjadi kesalahan internal: ${error.message}` }) };
