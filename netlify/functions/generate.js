@@ -1,4 +1,75 @@
-// ===== Util kecil untuk cek opener di server =====
+/* =========================
+   SEED OPENERS (starter pack variasi)
+   ========================= */
+const ACTA_SEED_OPENERS = [
+  "Pernah ngerasa dibohongin iklan?",
+  "Banyak orang bangga pake ini, tapi hasilnya ZONK.",
+  "Gila... uang kebuang cuma gara-gara satu hal kecil.",
+  "Sejujurnya, aku muak lihat kesalahan ini terus-terusan.",
+  "Berani taruhan, 8 dari 10 orang salah di bagian ini.",
+  "Cukup! Hentikan cara lama yang bikin kantong jebol.",
+  "Serius, kamu nggak mau dengerin ini? Rugi sendiri."
+];
+
+const VSOFT_SEED_OPENERS = [
+  "Kadang detail kecil justru bikin perbedaan besar.",
+  "Banyak orang nggak sadar, tapi efeknya kerasa banget.",
+  "Ada momen di mana kenyamanan itu jadi segalanya.",
+  "Rasanya tenang kalau ada solusi yang simpel tapi efektif.",
+  "Kepercayaan diri sering lahir dari hal sepele.",
+  "Bayangkan hari-hari yang lebih ringan dengan cara baru ini.",
+  "Senyum kecil bisa ubah seluruh suasana."
+];
+
+const VIBE_SEED_OPENERS = [
+  "POV: lo kira gampang, padahal bikin ribet banget.",
+  "Baru nyoba sekali, vibes langsung beda.",
+  "Nggak ngerti lagi, kok bisa segampang itu?",
+  "Ada yang relate nggak sih sama drama kecil ini?",
+  "Auto mindblown pas tau trik ini.",
+  "Sekali pake, langsung ngerasa ‘gila sih, ini enak banget’.",
+  "Kalian sadar nggak sih, ini tuh underrated parah."
+];
+
+const HABIT_SEED_OPENERS = [
+  "Setiap pagi gue punya kebiasaan kecil yang ternyata salah.",
+  "Kalau rutinitas ini lo lakukan terus, efeknya bakal kerasa banget.",
+  "Biasanya orang mulai hari gini, padahal ada cara lebih simpel.",
+  "Ada satu hal kecil tiap malam yang sering gue skip.",
+  "Sering banget rutinitas remeh bikin hasilnya jelek.",
+  "Coba bayangin rutinitas lo lebih praktis dari ini."
+];
+
+const RELATE_SEED_OPENERS = [
+  "Cuma gue apa kalian juga kesel kalo ngalamin ini?",
+  "Gue doang apa kalian juga sering skip hal ini?",
+  "Ada yang sama nggak, tiap kali ngalamin hal kecil ini?",
+  "Lo juga sering nggak sih ngalamin drama receh ini?",
+  "Cuma gue yang ngerasa terganggu sama hal sepele ini?",
+  "Aneh nggak sih, tapi ini bikin gue bad mood banget."
+];
+
+const MINOR_SEED_OPENERS = [
+  "Paling bikin greget kalau hal kecil ini kejadian.",
+  "Ada-ada aja, masalah receh tapi nyebelin banget.",
+  "Sumpah, gara-gara hal sepele ini mood hancur.",
+  "Cuma masalah kecil, tapi bikin gue kesel seharian.",
+  "Lucu sih, tapi ngeselin kalau terus kejadian.",
+  "Kenapa ya hal sepele ini bisa bikin bete?"
+];
+
+const HACK_SEED_OPENERS = [
+  "Gue nggak sengaja nemu trik gokil ini.",
+  "Baru sadar, ternyata ada cara simpel banget.",
+  "Nggak nyangka, hal ini bisa jadi hack sehari-hari.",
+  "Lo tau nggak, ada shortcut biar lebih gampang?",
+  "Mindblown! Ternyata gampang banget caranya.",
+  "Lo bakal kaget kalau cobain trik kecil ini."
+];
+
+/* =========================
+   UTIL: merge & guard opener
+   ========================= */
 function extractOpenerText(vo = "") {
   const firstSentence = (vo || "").split(/[.!?]/)[0] || "";
   return firstSentence.trim().split(/\s+/).slice(0,4).join(" ").toLowerCase();
@@ -7,6 +78,21 @@ function violatesAvoidList(vo, avoidList = []) {
   const opener = extractOpenerText(vo);
   return avoidList.some(s => opener.startsWith((s || "").toLowerCase()));
 }
+function mergeAvoid(avoidOpeners = [], seedList = []) {
+  // gabung, dedupe (lowercase), potong max 40 item biar prompt tetap ringkas
+  const set = new Set(
+    [...avoidOpeners, ...seedList]
+      .map(s => (s || "").trim())
+      .filter(Boolean)
+      .map(s => s.toLowerCase())
+  );
+  return Array.from(set).slice(0, 40);
+}
+
+/* =========================
+   PROMPT BUILDERS (7 formula)
+   Semua menerima avoidList
+   ========================= */
 
 // --- ACTA (LEBIH TAJAM + ANTI-MONOTON + ANTI-ULANG) ---
 const createActaPrompt = (prod, avoidList = []) => `
@@ -19,7 +105,7 @@ const createActaPrompt = (prod, avoidList = []) => `
 
   /* Variasi & Anti-Monoton:
      - Hindari pola pembuka klise: "JANGAN SKIP", "STOP SCROLLING", "90% orang", "Masih ...", "Kalau kamu ...".
-     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      - Boleh sindiran, ancaman, fakta pahit, mini-drama.
      - Sertakan ≥1 detail spesifik dari produk "${prod}".
      - 4 kalimat, total ±14–15 detik (ramah TTS). */
@@ -52,7 +138,7 @@ const createHalusPrompt = (prod, avoidList = []) => `
 
   /* Variasi & Anti-Monoton:
      - Hindari pembuka berulang: "Apakah kamu...", "Kadang kita...", "Bayangkan...".
-     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      - Gunakan alternatif: observasi ringan, cerita kecil, refleksi personal, pertanyaan halus.
      - Sertakan ≥1 detail spesifik dari produk "${prod}". */
 
@@ -84,7 +170,7 @@ const createGenZPrompt = (prod, avoidList = []) => `
 
   /* Variasi & Anti-Monoton:
      - Hindari repetisi pembuka seperti "Abis ...", "POV ...".
-     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      - Variasikan diksi gaul & ritme kalimat, tetap punchy. */
 
   Contoh:
@@ -100,7 +186,7 @@ const createGenZPrompt = (prod, avoidList = []) => `
   Jawab hanya dalam format JSON.
 `;
 
-/* ===================== 4 FORMULA TAMBAHAN (sekarang juga anti-ulang) ===================== */
+/* ===== 4 formula tambahan (kini anti-ulang juga) ===== */
 
 // --- HABIT (Habit → Relate → Twist → Reveal) ---
 const createHabitPrompt = (prod, avoidList = []) => `
@@ -111,8 +197,8 @@ const createHabitPrompt = (prod, avoidList = []) => `
   - Twist: beri detail unik/cepat (tips/ritual/alat sederhana).
   - Reveal: ungkap solusi singkat terkait produk, arahkan ke keranjang kuning.
 
-  /* Anti-ulang pembuka (riwayat):
-     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+  /* Anti-ulang pembuka:
+     Dilarang memulai kalimat pertama dengan (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      Usahakan pembuka tiap hasil berbeda ritme/diksi. */
 
   Contoh:
@@ -137,9 +223,9 @@ const createRelatePrompt = (prod, avoidList = []) => `
   - Engage: pancing komentar (tim A/B, setuju/nggak).
   - CTA: ajak coba/cek produk di keranjang kuning.
 
-  /* Anti-ulang pembuka (riwayat):
-     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
-     Boleh variasi: "gue doang apa...", "sering gak sih...", dll. */
+  /* Anti-ulang pembuka:
+     Dilarang memulai kalimat pertama dengan (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+     Variasikan diksi: "gue doang apa...", "sering gak sih...", dll. */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -163,8 +249,8 @@ const createMinorPrompt = (prod, avoidList = []) => `
   - Relieve: gambarkan mood yang keburu rusak.
   - Solution: tampilkan produk sebagai solusi cepat, arahkan ke keranjang kuning.
 
-  /* Anti-ulang pembuka (riwayat):
-     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+  /* Anti-ulang pembuka:
+     Dilarang memulai kalimat pertama dengan (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      Variasikan diksi keluhan: "paling ngeselin", "bikin geregetan", "auto bad mood", dst. */
 
   Contoh:
@@ -189,8 +275,8 @@ const createHackPrompt = (prod, avoidList = []) => `
   - Hack: fungsi unik/tak terduga (quick win).
   - Invitation: ajak audiens untuk coba, arahkan ke keranjang kuning.
 
-  /* Anti-ulang pembuka (riwayat):
-     Dilarang memulai kalimat pertama dengan: ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
+  /* Anti-ulang pembuka:
+     Dilarang memulai kalimat pertama dengan (riwayat + seed): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}.
      Variasikan diksi takjub: "kaget banget", "baru ngeh", "gila sih", "ternyata...". */
 
   Contoh:
@@ -206,7 +292,9 @@ const createHackPrompt = (prod, avoidList = []) => `
   Jawab hanya dalam format JSON.
 `;
 
-// --- FUNGSI UTAMA NETLIFY ---
+/* =========================
+   FUNGSI UTAMA NETLIFY
+   ========================= */
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Hanya metode POST yang diizinkan.' }) };
@@ -226,25 +314,37 @@ export async function handler(event) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
     }
 
-    let finalPrompt;
-    if (style === 'halus') {
-      finalPrompt = createHalusPrompt(product, avoidOpeners);
-    } else if (style === 'genz') {
-      finalPrompt = createGenZPrompt(product, avoidOpeners);
-    } else if (style === 'habit') {
-      finalPrompt = createHabitPrompt(product, avoidOpeners);
-    } else if (style === 'relate') {
-      finalPrompt = createRelatePrompt(product, avoidOpeners);
-    } else if (style === 'minor') {
-      finalPrompt = createMinorPrompt(product, avoidOpeners);
-    } else if (style === 'hack') {
-      finalPrompt = createHackPrompt(product, avoidOpeners);
-    } else {
-      finalPrompt = createActaPrompt(product, avoidOpeners);
+    // Merge avoidOpeners + seed list sesuai style
+    let mergedAvoid = [];
+    switch (style) {
+      case 'halus': mergedAvoid = mergeAvoid(avoidOpeners, VSOFT_SEED_OPENERS); break;
+      case 'genz': mergedAvoid = mergeAvoid(avoidOpeners, VIBE_SEED_OPENERS); break;
+      case 'habit': mergedAvoid = mergeAvoid(avoidOpeners, HABIT_SEED_OPENERS); break;
+      case 'relate': mergedAvoid = mergeAvoid(avoidOpeners, RELATE_SEED_OPENERS); break;
+      case 'minor': mergedAvoid = mergeAvoid(avoidOpeners, MINOR_SEED_OPENERS); break;
+      case 'hack':  mergedAvoid = mergeAvoid(avoidOpeners, HACK_SEED_OPENERS); break;
+      default:      mergedAvoid = mergeAvoid(avoidOpeners, ACTA_SEED_OPENERS); break;
     }
 
-    // semua style kita kasih variasi ringan (biar nggak template)
-    const needsMoreVar = true;
+    let finalPrompt;
+    if (style === 'halus') {
+      finalPrompt = createHalusPrompt(product, mergedAvoid);
+    } else if (style === 'genz') {
+      finalPrompt = createGenZPrompt(product, mergedAvoid);
+    } else if (style === 'habit') {
+      finalPrompt = createHabitPrompt(product, mergedAvoid);
+    } else if (style === 'relate') {
+      finalPrompt = createRelatePrompt(product, mergedAvoid);
+    } else if (style === 'minor') {
+      finalPrompt = createMinorPrompt(product, mergedAvoid);
+    } else if (style === 'hack') {
+      finalPrompt = createHackPrompt(product, mergedAvoid);
+    } else {
+      finalPrompt = createActaPrompt(product, mergedAvoid);
+    }
+
+    // Variasi sampling (semua style supaya tidak template)
+    const temperature = 1.0, top_p = 0.92, presence_penalty = 0.6, frequency_penalty = 0.35;
 
     async function callOpenAI(prompt) {
       const res = await fetch(apiUrl, {
@@ -257,10 +357,7 @@ export async function handler(event) {
             { role: 'user', content: prompt }
           ],
           response_format: { type: "json_object" },
-          temperature: needsMoreVar ? 1.0 : 0.9,
-          top_p: needsMoreVar ? 0.92 : 1.0,
-          presence_penalty: 0.6,
-          frequency_penalty: 0.35,
+          temperature, top_p, presence_penalty, frequency_penalty,
           max_tokens: 260,
         }),
       });
@@ -277,11 +374,11 @@ export async function handler(event) {
     // Panggilan pertama
     let content = await callOpenAI(finalPrompt);
 
-    // Server-side guard: kalau opener masih melanggar, 1x retry dengan instruksi tambahan
-    if (content?.vo && violatesAvoidList(content.vo, avoidOpeners)) {
+    // Guard: jika opener masih melanggar mergedAvoid, retry sekali
+    if (content?.vo && violatesAvoidList(content.vo, mergedAvoid)) {
       const extra = `
       Penting: Kalimat pertama VO Anda terdeteksi mirip pembuka yang dilarang.
-      Ulangi output dengan PEMBUKA BERBEDA dari daftar berikut: ${avoidOpeners.map(s=>`"${s}"`).join(", ")}.
+      Ulangi output dengan PEMBUKA BERBEDA dari daftar berikut: ${mergedAvoid.map(s=>`"${s}"`).join(", ")}.
       `;
       content = await callOpenAI(finalPrompt + "\n" + extra);
     }
