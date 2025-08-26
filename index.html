@@ -48,8 +48,8 @@
     }
     .actions { display:flex; gap:8px; margin-top:8px; }
     .hint { margin-top: 10px; font-size: 12px; color: var(--muted); }
-    .footer { margin-top: 16px; display:flex; justify-content: space-between; color: var(--muted); font-size:12px; }
-    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#22c55e; border-radius:50%; animation:spin .8s linear infinite; vertical-align:-3px; }
+    .footer { margin-top: 16px; display:flex; justify-content: space-between; align-items:center; color: var(--muted); font-size:12px; }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#22c55e; border-radius:50%; animation:spin .8s linear infinite; vertical-align:-3px; margin-right:6px; }
     @keyframes spin { to{ transform:rotate(360deg); } }
 
     select {
@@ -85,6 +85,9 @@
       .formula-mobile { display: block; font-size:12px; color:var(--muted); }
       .header h1 { font-size: 24px; }
     }
+
+    /* Status hidden by default */
+    #status { display:none; }
   </style>
 </head>
 <body>
@@ -137,8 +140,8 @@
       </div>
 
       <div class="footer">
-        <div>No tracking. Runs via Netlify Function.</div>
-        <div id="status">Ready</div>
+        <div>© 2025 PakPeo — All Rights Reserved</div>
+        <div id="status"></div>
       </div>
     </div>
   </div>
@@ -147,13 +150,13 @@
     const $ = (id) => document.getElementById(id);
     const state = { lastProduct: "", lastVO: "", lastCaption: "" };
 
-    // Persist pilihan formula biar keinget
+    // Persist pilihan formula
     const savedStyle = localStorage.getItem("vhg-style");
     if (savedStyle) {
-      const sel = document.getElementById("styleSelector");
+      const sel = $("styleSelector");
       if ([...sel.options].some(o => o.value === savedStyle)) sel.value = savedStyle;
     }
-    document.getElementById("styleSelector").addEventListener("change", (e) => {
+    $("styleSelector").addEventListener("change", (e) => {
       localStorage.setItem("vhg-style", e.target.value);
     });
 
@@ -177,10 +180,12 @@
     function setLoading(loading, target) {
       const status = $("status");
       if (loading) {
+        status.style.display = "flex";
         status.innerHTML = '<span class="spinner"></span> Generating…';
         if (target) target.value = "⏳ Generating…";
       } else {
-        status.textContent = "Ready";
+        status.style.display = "none"; // auto-hide
+        status.textContent = "";
       }
     }
 
