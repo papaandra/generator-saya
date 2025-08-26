@@ -1,210 +1,241 @@
-// netlify/functions/generate.js
-
-// ======================= PROMPT BUILDERS =======================
-
-// 1) ACTA (Viral, tajam)
+// --- PROMPT BARU UNTUK GAYA ACTA (LEBIH TAJAM) ---
 const createActaPrompt = (prod) => `
-Anda adalah seorang Viral Hook Generator profesional yang hanya membalas dalam JSON valid.
-Gunakan formula "kasar" untuk hook video TikTok:
-1) Tombol Pattern (Play Grabber) — interupsi scroll. Contoh: "STOP SCROLLING!", "JANGAN SKIP KALAU KAMU..."
-2) Psychological Trigger (Forced Engagement) — FOMO / pain point relevan. Contoh: "90% orang gagal karena..."
-3) Curiosity Gap (Click Magnet) — info setengah, bikin penasaran. Contoh: "Rahasianya cuma 1 hal kecil..."
-4) Power Word (Buy Trigger) — kata pemicu aksi seperti "Rahasia", "Terbukti", "Eksklusif", akhiri CTA ke keranjang kuning, gunakan kata "TERUNGKAP" di kalimat akhir.
+  Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
+  Anda WAJIB menggunakan formula "kasar" berikut untuk hook video TikTok:
+  1.  **Tombol Pattern (Play Grabber):** Gunakan kalimat pembuka yang menginterupsi scroll. Contoh: "STOP SCROLLING!", "JANGAN SKIP KALAU KAMU...", "BAYANGIN INI TERJADI KE KAMU...".
+  2.  **Psychological Trigger (Forced Engagement):** Gunakan FOMO atau sentuh pain point yang relevan. Contoh: "90% orang gagal karena...", "Kalau kamu skip, kamu bakal nyesel...".
+  3.  **Curiosity Gap (Click Magnet):** Tampilkan informasi setengah untuk membuat penasaran. Contoh: "Rahasianya cuma 1 hal kecil...", "Kebanyakan orang salah langkah di sini...".
+  4.  **Power Word (Buy Trigger):** Sisipkan salah satu kata pemicu aksi seperti "Rahasia", "Terbukti", "Eksklusif", dan akhiri dengan CTA yang jelas ke keranjang kuning.
 
-Kaidah VO: 4 kalimat pendek, total ~14–15 detik (TTS), bahasa Indonesia.
-Input Produk: "${prod}"
-
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat urut sesuai formula, akhiri dengan kata TERUNGKAP dan CTA keranjang kuning.",
-  "caption": "2–3 kalimat + 5 hashtag relevan (Indonesia)."
-}
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "STOP SCROLLING! 90% orang gak sadar kalau cara sikat gigi mereka salah. Hasilnya, napas tetap bau dan karang gigi numpuk. Rahasia gigi bersih dan napas wangi ada di satu trik eksklusif yang ada di sikat gigi ini. Cek keranjang kuning sekarang!",
+    "caption": "Merasa sikat gigi udah bener tapi napas masih bau? Mungkin cara kamu salah. Temukan solusi terbuktinya di keranjang kuning! #sikatgigi #napasbau #gigiputih #racuntiktok"
+  }
+  
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// 2) HALUS (isi = VSOFT) — nama tetap "Halus"
+// --- PROMPT UNTUK GAYA HALUS (VSOFT) ---
 const createHalusPrompt = (prod) => `
-Anda adalah Copywriter Viral yang elegan. Balas HANYA JSON valid.
-Gunakan formula HALUS (isi: VSOFT = Vivid, Story, Offer, Friendly CTA):
-- Vivid Problem: gambarkan masalah nyata yang mudah divisualkan.
-- Story Touch: sedikit narasi/imajinasi, tonenya hangat (aku/kamu).
-- Offer Clarity: produk sebagai solusi jelas.
-- Friendly CTA: ajakan ramah, arahkan ke keranjang kuning + hashtag.
+  Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
+  Anda harus menggunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
+  
+  PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
 
-Kaidah VO: 4 kalimat pendek, total ~14–15 detik (TTS), bahasa Indonesia.
-Input Produk: "${prod}"
+  Berikut adalah definisi setiap elemen formula VSOFT:
+  - V (Vivid Problem): Gambarkan masalah nyata dengan bahasa yang mudah dibayangkan.
+  - S (Story Touch): Sisipkan sedikit narasi atau imajinasi audiens, gunakan gaya bahasa yang personal (aku, kamu).
+  - O (Offer Clarity): Tampilkan produk sebagai solusi yang jelas dan bernilai.
+  - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
 
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat halus, persuasif, tetap punchy (~15 detik).",
-  "caption": "2–3 kalimat hangat + 5 hashtag relevan."
-}
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Apakah Anda sering merasa gigi belum bersih sempurna? Sisa kuman bisa menyebabkan masalah gusi. Bayangkan jika setiap sikat gigi bisa terasa seperti pembersihan di dokter gigi. Koleksi kami sudah tersedia di keranjang kuning.",
+    "caption": "Untuk senyum yang sehat dan percaya diri, kebersihan gigi adalah kunci. Sikat gigi kami didesain dengan teknologi terbaru untuk membersihkan hingga ke sela terdalam. Jadikan kebersihan mulut sebagai prioritas. Cek keranjang kuning sekarang. #perawatangigi #sikatgigipremium #senyumsehat #kesehatanmulut"
+  }
+  
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// 3) Gen Z (VIBE)
+// --- PROMPT BARU UNTUK GAYA GEN Z (VIBE) ---
 const createGenZPrompt = (prod) => `
-Anda adalah Viral Content Creator gaya Gen Z. Balas HANYA JSON valid.
-Formula VIBE (Vibes Check, Instant Relevancy, Brevity & Punchline, Easy Action):
-- Vibes Check: pembuka relatable/gaul (POV, spill, vibes).
-- Instant Relevancy: masalah yang langsung relevan buat Gen Z.
-- Brevity & Punchline: solusi super ringkas + punchline.
-- Easy Action: CTA santai (spill/cek keranjang kuning/wajib punya).
+  Anda adalah seorang Viral Content Creator yang autentik, santai, dan menggunakan gaya bahasa anak muda (Gen Z).
+  Anda harus menggunakan formula VIBE (Vibes Check, Instant Relevancy, Brevity & Punchline, Easy Action) untuk membuat konten dalam format JSON.
+  
+  PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
 
-Kaidah VO: 4 kalimat sangat ringkas, total ~14–15 detik (TTS), bahasa Indonesia/gaul natural.
-Input Produk: "${prod}"
+  Berikut adalah definisi setiap elemen formula VIBE:
+  - V (Vibes Check): Mulai dengan skenario yang relatable atau bahasa gaul (POV, spill, vibes).
+  - I (Instant Relevancy): Masalah yang langsung relevan dengan audiens Gen Z.
+  - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
+  - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
 
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat gaul, punchy, ~15 detik.",
-  "caption": "2–3 kalimat santai + 5 hashtag relevan."
-}
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Abis makan seblak pedes banget, terus napas naga. Cuma satu sikat ini, vibes mulut auto fresh lagi. Spill produknya di keranjang kuning ya.",
+    "caption": "Pusing gak sih nyari sikat gigi yang bener-bener works? Udah deh, gak usah pusing lagi. Wajib punya sih ini, langsung co aja. #napasnaga #sikatgigi #racuntiktok #xyzbca #beliditiktokshop"
+  }
+  
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// 4) Habit & Routine (Habit → Relate → Twist → Reveal)
+/* ===================== 4 FORMULA BARU ===================== */
+
+// --- HABIT (Habit → Relate → Twist → Reveal) ---
 const createHabitPrompt = (prod) => `
-Anda adalah pembuat hook kategori Kebiasaan & Rutinitas Harian. Balas HANYA JSON valid.
-Formula: Habit → Relate → Twist → Reveal.
-- Habit: kebiasaan umum sehari-hari
-- Relate: "ada yang sama gak?" / "kalian juga gini gak?"
-- Twist: detail unik/cepat (tips/ritual/alat)
-- Reveal: rahasia/solusi singkat, arahkan ke keranjang kuning
+  Anda adalah pembuat hook kategori Kebiasaan & Rutinitas Harian.
+  Gunakan formula: Habit → Relate → Twist → Reveal. Balas dalam JSON valid.
+  - Habit: mulai dari kebiasaan harian yang umum.
+  - Relate: ajak audiens merasa "sama banget".
+  - Twist: beri detail unik/cepat (tips/ritual/alat sederhana).
+  - Reveal: ungkap solusi singkat terkait produk, arahkan ke keranjang kuning.
 
-Kaidah VO: 4 kalimat pendek, total ~14–15 detik (TTS), bahasa Indonesia.
-Input Produk: "${prod}"
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Ada yang sama gak, tiap pagi pasti sikat gigi sambil buru-buru? Biasanya malah jadi nggak bersih maksimal. Aku nemu cara simpel biar tetap bersih walau mepet waktu. Cek sikat ini di keranjang kuning.",
+    "caption": "Rutinitas kecil yang bikin hari lebih enak. Kamu tim sikat pagi dulu atau sarapan dulu? #morningroutine #lifehack #keranjangkuning #sikatgigi #cleanhabits"
+  }
 
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat natural, ~15 detik.",
-  "caption": "2–3 kalimat santai + 5 hashtag relevan."
-}
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// 5) Relate/Confess (“Cuma Aku atau Kalian Juga?”)
+// --- RELATE (Relate → Confess → Engage → CTA) ---
 const createRelatePrompt = (prod) => `
-Anda adalah pembuat hook "Cuma aku atau kalian juga?". Balas HANYA JSON valid.
-Formula: Relate → Confess → Engage → CTA.
-- Relate: mulai dengan "cuma aku atau kalian juga..."
-- Confess: ngaku kebiasaan kecil/guilty pleasure terkait produk
-- Engage: pancing komentar (tim A/B, setuju/nggak)
-- CTA: arahkan coba produk/cek keranjang kuning
+  Anda adalah pembuat hook "Cuma aku atau kalian juga...".
+  Gunakan formula: Relate → Confess → Engage → CTA. Balas dalam JSON valid.
+  - Relate: mulai dengan "cuma aku atau kalian juga..."
+  - Confess: akui kebiasaan kecil/guilty pleasure terkait produk.
+  - Engage: pancing komentar (tim A/B, setuju/nggak).
+  - CTA: ajak coba/cek produk di keranjang kuning.
 
-Kaidah VO: 4 kalimat ringan, ~14–15 detik (TTS), bahasa Indonesia.
-Input Produk: "${prod}"
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Cuma aku atau kalian juga suka skip malam ini karena capek? Besoknya langsung nyesel, napas nggak enak. Ternyata ada cara biar sikat malam jadi cepet dan gak ribet. Spill di keranjang kuning, ya.",
+    "caption": "Relate gak? Tim yang rajin sikat malam atau tim mager? Comment di bawah! #relate #guiltypleasure #keranjangkuning #sikatgigi #malam"
+  }
 
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat pancing komentar, ~15 detik.",
-  "caption": "2–3 kalimat mengundang interaksi + 5 hashtag."
-}
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// 6) Minor Annoyance (Pain → Exaggerate → Relieve → Solution)
+// --- MINOR (Pain → Exaggerate → Relieve → Solution) ---
 const createMinorPrompt = (prod) => `
-Anda adalah pembuat hook "Masalah sepele tapi nyebelin". Balas HANYA JSON valid.
-Formula: Pain → Exaggerate → Relieve → Solution.
-- Pain: masalah kecil sehari-hari
-- Exaggerate: lebay-in sedikit (komedi ringan)
-- Relieve: mood hancur/ganggu alur hari
-- Solution: hadirkan produk sebagai solusi cepat + arah keranjang kuning
+  Anda adalah pembuat hook "Masalah sepele tapi nyebelin".
+  Gunakan formula: Pain → Exaggerate → Relieve → Solution. Balas dalam JSON valid.
+  - Pain: sebutkan masalah kecil sehari-hari.
+  - Exaggerate: lebay-in sedikit (komedi ringan).
+  - Relieve: gambarkan mood yang keburu rusak.
+  - Solution: tampilkan produk sebagai solusi cepat, arahkan ke keranjang kuning.
 
-Kaidah VO: 4 kalimat fun, ~14–15 detik (TTS), bahasa Indonesia.
-Input Produk: "${prod}"
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Paling nyebelin kalau habis sikat gigi tapi masih ada sisa di sela, rasanya kaya belum mandi sehari. Mood pagi auto hancur. Untung ketemu sikat yang bisa masuk sela tanpa drama. Cek keranjang kuning buat yang begini juga.",
+    "caption": "Hal kecil yang ganggu, tapi ada solusinya. #masalahsepele #lifeimprovement #keranjangkuning #sikatgigi #rapi"
+  }
 
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat fun, ~15 detik.",
-  "caption": "2–3 kalimat + 5 hashtag relevan."
-}
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// 7) Life Hack (Surprise → Reveal → Hack → Invitation)
+// --- HACK (Surprise → Reveal → Hack → Invitation) ---
 const createHackPrompt = (prod) => `
-Anda adalah pembuat hook Life Hack/penemuan tidak sengaja. Balas HANYA JSON valid.
-Formula: Surprise → Reveal → Hack → Invitation.
-- Surprise: "gak sengaja nemu..." / ekspresi takjub
-- Reveal: sebut produknya
-- Hack: fungsi unik/tak terduga (quick win)
-- Invitation: ajak coba sendiri, arahkan keranjang kuning
+  Anda adalah pembuat hook Life Hack/temuan tidak sengaja.
+  Gunakan formula: Surprise → Reveal → Hack → Invitation. Balas dalam JSON valid.
+  - Surprise: "gak sengaja nemu..." / ekspresi takjub.
+  - Reveal: sebut produknya.
+  - Hack: fungsi unik/tak terduga (quick win).
+  - Invitation: ajak audiens untuk coba, arahkan ke keranjang kuning.
 
-Kaidah VO: 4 kalimat, ~14–15 detik (TTS), bahasa Indonesia.
-Input Produk: "${prod}"
+  Contoh:
+  Input Produk: Sikat Gigi
+  Output yang diharapkan:
+  {
+    "vo": "Gak sengaja nemu trik biar sikat gigi 30 detik tapi tetap berasa bersih. Ternyata rahasianya ada di bentuk kepala sikatnya. Jadi sudut-sudut mulut gak kelewat. Mau coba? Ada di keranjang kuning.",
+    "caption": "Trik kecil, hasil kerasa. Pernah coba cara ini? #lifehack #keranjangkuning #sikatgigi #hack #bersih"
+  }
 
-Balas HANYA JSON:
-{
-  "vo": "4 kalimat menarik, ~15 detik.",
-  "caption": "2–3 kalimat + 5 hashtag relevan."
-}
+  SEKARANG, TUGAS ANDA:
+  Gunakan formula dan contoh di atas untuk produk: "${prod}".
+  Jawab hanya dalam format JSON.
 `;
 
-// Mapping style -> builder
-const PROMPT_BUILDERS = {
-  acta: createActaPrompt,
-  halus: createHalusPrompt,   // isinya VSOFT, nama tetap "Halus"
-  genz: createGenZPrompt,
-  habit: createHabitPrompt,
-  relate: createRelatePrompt,
-  minor: createMinorPrompt,
-  hack: createHackPrompt,
-};
-
-// ======================= HANDLER =======================
+// --- FUNGSI UTAMA NETLIFY ---
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Hanya metode POST yang diizinkan.' }) };
   }
 
-  try {
-    const { product, mode = 'both', style = 'acta' } = JSON.parse(event.body || '{}');
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    return { statusCode: 500, body: JSON.stringify({ error: 'Kunci API (OPENAI_API_KEY) belum diatur di Netlify.' }) };
+  }
+  
+  const apiModel = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+  const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
-    if (!product || typeof product !== 'string' || !product.trim()) {
+  try {
+    const { product, mode, style = 'acta' } = JSON.parse(event.body);
+    
+    if (!product) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
     }
 
-    const promptBuilder = PROMPT_BUILDERS[style] || PROMPT_BUILDERS.acta;
-    const finalPrompt = promptBuilder(product.trim());
-
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'Kunci API (OPENAI_API_KEY) belum diatur di Netlify.' }) };
+    let finalPrompt;
+    if (style === 'halus') {
+      finalPrompt = createHalusPrompt(product);
+    } else if (style === 'genz') {
+      finalPrompt = createGenZPrompt(product);
+    } else if (style === 'habit') {
+      finalPrompt = createHabitPrompt(product);
+    } else if (style === 'relate') {
+      finalPrompt = createRelatePrompt(product);
+    } else if (style === 'minor') {
+      finalPrompt = createMinorPrompt(product);
+    } else if (style === 'hack') {
+      finalPrompt = createHackPrompt(product);
+    } else {
+      finalPrompt = createActaPrompt(product);
     }
 
-    const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
-
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model,
-        temperature: 0.9,
-        max_tokens: 300,
-        response_format: { type: 'json_object' },
+        model: apiModel,
         messages: [
-          { role: 'system', content: 'You are a professional Indonesian content generator. Only return VALID JSON with keys: vo, caption. No extra text.' },
-          { role: 'user', content: finalPrompt },
+          { role: 'system', content: 'You are a professional content generator who always responds in valid Indonesian language JSON format.' },
+          { role: 'user', content: finalPrompt }
         ],
+        response_format: { type: "json_object" },
+        temperature: 0.9,
+        max_tokens: 250,
       }),
     });
 
-    if (!resp.ok) {
-      const err = await resp.text().catch(() => '');
-      return { statusCode: resp.status, body: JSON.stringify({ error: `OpenAI error: ${err || resp.status}` }) };
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error dari OpenAI:', errorData);
+      const errorMessage = errorData.error?.message || 'Terjadi kesalahan pada API OpenAI.';
+      return { statusCode: response.status, body: JSON.stringify({ error: `Gagal memanggil API OpenAI: ${errorMessage}` }) };
     }
 
-    const data = await resp.json();
-    const raw = data?.choices?.[0]?.message?.content || '{}';
+    const data = await response.json();
+    const content = JSON.parse(data.choices[0].message.content);
 
-    // JSON guard
-    let parsed;
-    try { parsed = JSON.parse(raw); }
-    catch { parsed = { vo: raw, caption: '' }; }
-
-    // mode filtering
-    const result =
-      mode === 'vo' ? { vo: parsed.vo } :
-      mode === 'caption' ? { caption: parsed.caption } :
-      { vo: parsed.vo, caption: parsed.caption };
+    let result = {};
+    if (mode === 'both') {
+      result = { vo: content.vo, caption: content.caption };
+    } else if (mode === 'vo') {
+      result = { vo: content.vo };
+    } else if (mode === 'caption') {
+      result = { caption: content.caption };
+    }
 
     return {
       statusCode: 200,
@@ -213,6 +244,7 @@ export async function handler(event) {
     };
 
   } catch (error) {
+    console.error('Terjadi error di Netlify Function:', error);
     return { statusCode: 500, body: JSON.stringify({ error: `Terjadi kesalahan internal: ${error.message}` }) };
   }
 }
