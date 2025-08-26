@@ -31,30 +31,34 @@ Buat hook kasar ala ACTA untuk produk: "${prod}".
 Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT UNTUK GAYA HALUS (VSOFT) ---
+// --- PROMPT UNTUK GAYA HALUS (VSOFT, ANTI TEMPLATE) ---
 const createHalusPrompt = (prod) => `
-  Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
-  Anda harus menggunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
-  
-  PASTIKAN VO SANGAT RINGKAS DAN PADAT (total sekitar 14-15 detik).
+Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
+Gunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
 
-  Berikut adalah definisi setiap elemen formula VSOFT:
-  - V (Vivid Problem): Gambarkan masalah nyata dengan bahasa yang mudah dibayangkan.
-  - S (Story Touch): Sisipkan sedikit narasi atau imajinasi audiens, gunakan gaya bahasa yang personal (aku, kamu).
-  - O (Offer Clarity): Tampilkan produk sebagai solusi yang jelas dan bernilai.
-  - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
+ATURAN:
+- Dilarang membuka dengan "Apakah kamu..." atau "Bayangkan...".
+- Gunakan pembuka yang lebih segar:
+  • Pernyataan reflektif: "Kadang kita nggak sadar kalau..."
+  • Cerita kecil: "Setiap pagi, banyak orang ngalamin hal sama..."
+  • Observasi personal: "Gue sering lihat temen gue ngalamin ini..."
+- Kalimat harus mengalir halus, seperti percakapan santai tapi tetap classy.
+- Hindari template tanya + bayangkan. Variasi gaya bahasa tiap kalimat.
+- Tetap 4 kalimat (±14–15 detik, cocok TTS).
+- Harus menyinggung 1 detail spesifik dari produk "${prod}".
+- Tutup dengan CTA ramah yang mengarah ke keranjang kuning.
 
-  Contoh:
-  Input Produk: Sikat Gigi
-  Output yang diharapkan:
-  {
-    "vo": "Apakah Anda sering merasa gigi belum bersih sempurna? Sisa kuman bisa menyebabkan masalah gusi. Bayangkan jika setiap sikat gigi bisa terasa seperti pembersihan di dokter gigi. Koleksi kami sudah tersedia di keranjang kuning.",
-    "caption": "Untuk senyum yang sehat dan percaya diri, kebersihan gigi adalah kunci. Sikat gigi kami didesain dengan teknologi terbaru untuk membersihkan hingga ke sela terdalam. Jadikan kebersihan mulut sebagai prioritas. Cek keranjang kuning sekarang. #perawatangigi #sikatgigipremium #senyumsehat #kesehatanmulut"
-  }
-  
-  SEKARANG, TUGAS ANDA:
-  Gunakan formula dan contoh di atas untuk produk: "${prod}".
-  Jawab hanya dalam format JSON.
+Contoh:
+Input Produk: Skincare
+Output yang diharapkan:
+{
+  "vo": "Setiap malam kulit ketemu debu, polusi, dan sisa makeup yang nyangkut di pori. Kalau dibiarkan, muka gampang kusam dan jerawatan. Serum ini punya kandungan niacinamide yang langsung nenangin kulit setelah dibersihin. Klik keranjang kuning buat jaga kulit tetap sehat tiap hari.",
+  "caption": "Kulit sehat nggak butuh ribet, cuma butuh produk yang tepat. Yuk rawat diri mulai sekarang. #skincare #selflove #keranjangkuning #glowup #vsoft"
+}
+
+SEKARANG, TUGAS ANDA:
+Gunakan formula di atas untuk produk: "${prod}".
+Jawab hanya dalam format JSON.
 `;
 
 // --- PROMPT BARU UNTUK GAYA GEN Z (VIBE) ---
