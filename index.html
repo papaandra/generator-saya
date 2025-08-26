@@ -37,12 +37,14 @@
       background: #10b981; color:#00100a; font-weight:700;
       border: none; border-radius: 10px; padding: 12px 16px; font-size: 15px; cursor: pointer;
       box-shadow: 0 6px 20px rgba(16,185,129,.25);
+      transition: opacity .2s ease;
     }
     button.secondary { background: #1f2937; color:#e5e7eb; box-shadow: none; border:1px solid rgba(148,163,184,.2); }
     button.ghost {
       background: transparent; color: #cbd5e1; border:1px dashed rgba(148,163,184,.35);
       padding: 10px 12px; font-weight:600; border-radius: 10px;
     }
+    button[disabled] { opacity: .6; cursor: not-allowed; box-shadow: none; }
     .grid { display:grid; grid-template-columns: 1fr; gap: 14px; margin-top:14px; }
     @media (min-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
     .box h3 { margin:6px 0 10px 0; font-size: 14px; color: var(--muted); letter-spacing:.3px; }
@@ -117,10 +119,10 @@
             <option value="minor">😅 MINOR (Sepele Tapi Nyebelin)</option>
             <option value="hack">🛠️ HACK (Life Hack)</option>
           </select>
-          <button id="clearHistoryBtn" class="ghost" title="Reset riwayat pembuka untuk formula terpilih">Clear History</button>
+          <button id="clearHistoryBtn" class="ghost" title="Reset riwayat opener untuk formula terpilih (anti-ulang dimulai dari nol)">Clear History</button>
         </div>
-        <button id="genBtn">Generate</button>
-        <button id="clearBtn" class="secondary">Clear</button>
+        <button id="genBtn" title="Generate VO & Caption (cooldown 3 detik)">Generate</button>
+        <button id="clearBtn" class="secondary" title="Bersihkan input & hasil di layar (riwayat opener tetap tersimpan)">Clear</button>
       </div>
 
       <div class="grid">
@@ -128,8 +130,8 @@
           <h3>🔊 Voice Over (4 kalimat • ±15 detik)</h3>
           <textarea id="vo" readonly placeholder="Hasil VO akan muncul di sini…"></textarea>
           <div class="actions">
-            <button id="copyVo">Copy VO</button>
-            <button id="regenVo" class="secondary">Regenerate VO</button>
+            <button id="copyVo" title="Salin VO ke clipboard">Copy VO</button>
+            <button id="regenVo" class="secondary" title="Regenerate VO saja (cooldown 3 detik)">Regenerate VO</button>
           </div>
           <div class="hint">Tip: paste ke TTS, atur speed ±1.0 untuk durasi ±15s.</div>
         </div>
@@ -137,8 +139,8 @@
           <h3>✍️ Caption & Hashtag</h3>
           <textarea id="caption" readonly placeholder="Hasil Caption & Hashtag akan muncul di sini…"></textarea>
           <div class="actions">
-            <button id="copyCap">Copy Caption</button>
-            <button id="regenCap" class="secondary">Regenerate Caption</button>
+            <button id="copyCap" title="Salin Caption ke clipboard">Copy Caption</button>
+            <button id="regenCap" class="secondary" title="Regenerate Caption saja (cooldown 3 detik)">Regenerate Caption</button>
           </div>
           <div class="hint">Format: 2–3 kalimat + 5 hashtag relevan.</div>
         </div>
@@ -154,6 +156,7 @@
   <script>
     const $ = (id) => document.getElementById(id);
     const state = { lastProduct: "", lastVO: "", lastCaption: "" };
+    let isBusy = false; // blokir aksi ganda selama proses
 
     /* ===== Persist pilihan formula ===== */
     const savedStyle = localStorage.getItem("vhg-style");
@@ -196,6 +199,28 @@
       setTimeout(() => { status.style.display = "none"; status.textContent = ""; }, 1400);
     }
 
+    /* ===== Cooldown helper (anti-spam) ===== */
+    function cooldownButton(btn, ms = 3000) {
+      btn.disabled = true;
+      btn.setAttribute("aria-disabled", "true");
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.removeAttribute("aria-disabled");
+      }, ms);
+    }
+    function lockUI() {
+      isBusy = true;
+      $("genBtn").disabled = true;
+      $("regenVo").disabled = true;
+      $("regenCap").disabled = true;
+    }
+    function unlockUI() {
+      isBusy = false;
+      $("genBtn").disabled = false;
+      $("regenVo").disabled = false;
+      $("regenCap").disabled = false;
+    }
+
     async function callApi(route, payload) {
       const res = await fetch(route, {
         method: "POST",
@@ -203,12 +228,12 @@
         body: JSON.stringify(payload)
       });
       if (!res.ok) {
+        let msg = res.statusText || ("HTTP Error " + res.status);
         try {
           const errJson = await res.json();
-          throw new Error(errJson.error || "Terjadi kesalahan pada server.");
-        } catch(e) {
-          throw new Error(res.statusText || ("HTTP Error " + res.status));
-        }
+          if (errJson?.error) msg = errJson.error;
+        } catch {}
+        throw new Error(msg);
       }
       return res.json();
     }
@@ -219,13 +244,16 @@
         status.style.display = "flex";
         status.innerHTML = '<span class="spinner"></span> Generating…';
         if (target) target.value = "⏳ Generating…";
+        lockUI();
       } else {
         status.style.display = "none"; // auto-hide
         status.textContent = "";
+        unlockUI();
       }
     }
 
     async function generateAll() {
+      if (isBusy) return; // cegah double trigger
       const product = $("product").value.trim();
       if (!product) return alert("Isi nama produk dulu ya.");
       state.lastProduct = product;
@@ -243,15 +271,16 @@
         state.lastCaption = data.caption || "";
         pushOpener(style, data.vo); // simpan opener terbaru
       } catch (e) {
-        $("vo").value = "";
-        $("caption").value = "";
-        alert("Gagal generate: " + e.message);
+        let msg = e.message || "Gagal generate.";
+        if (/429/.test(msg)) msg = "Terlalu banyak permintaan (429). Coba lagi sebentar, ya.";
+        alert("Gagal generate: " + msg);
       } finally {
         setLoading(false);
       }
     }
 
     async function regen(kind) {
+      if (isBusy) return; // cegah double trigger
       const product = state.lastProduct || $("product").value.trim();
       if (!product) return alert("Isi nama produk dulu ya.");
 
@@ -270,7 +299,9 @@
           state.lastCaption = data.caption || "";
         }
       } catch (e) {
-        alert("Gagal regenerate: " + e.message);
+        let msg = e.message || "Gagal regenerate.";
+        if (/429/.test(msg)) msg = "Terlalu banyak permintaan (429). Coba lagi sebentar, ya.";
+        alert("Gagal regenerate: " + msg);
       } finally {
         setLoading(false);
       }
@@ -286,16 +317,21 @@
       setTimeout(() => (btn.textContent = prev), 900);
     }
 
-    $("genBtn").addEventListener("click", generateAll);
+    // Event listeners + cooldown
+    $("genBtn").addEventListener("click", () => { generateAll(); cooldownButton($("genBtn"), 3000); });
     $("clearBtn").addEventListener("click", () => { $("product").value=""; $("vo").value=""; $("caption").value=""; });
-    $("regenVo").addEventListener("click", () => regen("vo"));
-    $("regenCap").addEventListener("click", () => regen("caption"));
+    $("regenVo").addEventListener("click", () => { regen("vo"); cooldownButton($("regenVo"), 3000); });
+    $("regenCap").addEventListener("click", () => { regen("caption"); cooldownButton($("regenCap"), 3000); });
     $("copyVo").addEventListener("click", () => copyToClipboard("vo"));
     $("copyCap").addEventListener("click", () => copyToClipboard("caption"));
     $("clearHistoryBtn").addEventListener("click", () => clearOpeners($("styleSelector").value));
 
-    // Enter to generate
-    $("product").addEventListener("keydown", (e) => { if (e.key === "Enter") generateAll(); });
+    // Enter to generate (ikutin cooldown juga)
+    $("product").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !isBusy) {
+        generateAll(); cooldownButton($("genBtn"), 3000);
+      }
+    });
   </script>
 </body>
 </html>
