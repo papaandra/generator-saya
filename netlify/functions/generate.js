@@ -1,5 +1,5 @@
-// --- PROMPT BARU UNTUK GAYA ACTA (LEBIH TAJAM + ANTI-MONOTON) ---
-const createActaPrompt = (prod) => `
+// --- ACTA (LEBIH TAJAM + ANTI-MONOTON + ANTI-ULANG) ---
+const createActaPrompt = (prod, avoidList = []) => `
   Anda adalah seorang Viral Hook Generator profesional yang menciptakan konten viral dalam format JSON.
   Anda WAJIB menggunakan formula "kasar" berikut untuk hook video TikTok:
   1.  **Tombol Pattern (Play Grabber):** Gunakan kalimat pembuka yang menginterupsi scroll. Contoh: "STOP SCROLLING!", "JANGAN SKIP KALAU KAMU...", "BAYANGIN INI TERJADI KE KAMU...".
@@ -7,13 +7,12 @@ const createActaPrompt = (prod) => `
   3.  **Curiosity Gap (Click Magnet):** Tampilkan informasi setengah untuk membuat penasaran. Contoh: "Rahasianya cuma 1 hal kecil...", "Kebanyakan orang salah langkah di sini...".
   4.  **Power Word (Buy Trigger):** Sisipkan salah satu kata pemicu aksi seperti "Rahasia", "Terbukti", "Eksklusif", dan akhiri dengan CTA yang jelas ke keranjang kuning.
 
-  /* Variasi & Anti-Monoton (WAJIB DIPATUHI):
-     - Jangan memakai pola pembuka yang sama berulang-ulang.
-     - Hindari membuka dengan frasa klise yang terlalu sering muncul:
-       "JANGAN SKIP", "STOP SCROLLING", "90% orang", "Masih ...", "Kalau kamu ..."
-     - Pilih variasi pembuka yang keras/“kasar” lain: sindiran, ancaman, fakta pahit, atau mini-drama.
-     - Sertakan minimal 1 detail spesifik dari produk "${prod}" agar tidak generik.
-     - Total 4 kalimat, ±14–15 detik (ramah TTS). */
+  /* Variasi & Anti-Monoton:
+     - Hindari pola pembuka berulang seperti: "JANGAN SKIP", "STOP SCROLLING", "90% orang", "Masih ...", "Kalau kamu ...".
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}
+     - Pilih variasi pembuka keras/“kasar” lain: sindiran, ancaman, fakta pahit, atau mini-drama.
+     - Sertakan minimal 1 detail spesifik dari produk "${prod}" (fitur/bahan/hasil/sensasi).
+     - 4 kalimat, total ±14–15 detik (ramah TTS). */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -28,8 +27,8 @@ const createActaPrompt = (prod) => `
   Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT UNTUK GAYA HALUS (VSOFT + ANTI-MONOTON) ---
-const createHalusPrompt = (prod) => `
+// --- HALUS (VSOFT + ANTI-MONOTON + ANTI-ULANG) ---
+const createHalusPrompt = (prod, avoidList = []) => `
   Anda adalah seorang Copywriter Viral yang elegan dan persuasif.
   Anda harus menggunakan formula VSOFT (Vivid, Story, Offer, Friendly CTA) untuk membuat konten dalam format JSON.
   
@@ -41,10 +40,11 @@ const createHalusPrompt = (prod) => `
   - O (Offer Clarity): Tampilkan produk sebagai solusi yang jelas dan bernilai.
   - FT (Friendly CTA): Ajakan ramah, tidak memaksa, dan mengarah ke keranjang kuning, diikuti hashtag relevan.
 
-  /* Variasi & Anti-Monoton (WAJIB DIPATUHI):
-     - Hindari selalu membuka dengan "Apakah kamu...", "Kadang kita...", atau "Bayangkan...".
-     - Gunakan variasi pembuka elegan lain: observasi ringan, cerita kecil, refleksi personal, atau pertanyaan halus.
-     - Sertakan minimal 1 detail spesifik dari produk "${prod}". */
+  /* Variasi & Anti-Monoton:
+     - Hindari pembuka klise berulang seperti: "Apakah kamu...", "Kadang kita...", "Bayangkan...".
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}
+     - Gunakan alternatif elegan: observasi ringan, cerita kecil, refleksi personal, atau pertanyaan halus.
+     - Sertakan 1 detail spesifik dari produk "${prod}". */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -59,8 +59,8 @@ const createHalusPrompt = (prod) => `
   Jawab hanya dalam format JSON.
 `;
 
-// --- PROMPT BARU UNTUK GAYA GEN Z (VIBE + ANTI-MONOTON) ---
-const createGenZPrompt = (prod) => `
+// --- VIBE (Gen Z) + ANTI-MONOTON + ANTI-ULANG (ringan) ---
+const createGenZPrompt = (prod, avoidList = []) => `
   Anda adalah seorang Viral Content Creator yang autentik, santai, dan menggunakan gaya bahasa anak muda (Gen Z).
   Anda harus menggunakan formula VIBE (Vibes Check, Instant Relevancy, Brevity & Punchline, Easy Action) untuk membuat konten dalam format JSON.
   
@@ -72,9 +72,10 @@ const createGenZPrompt = (prod) => `
   - B (Brevity & Punchline): Solusi disampaikan dengan sangat ringkas, padat, dan punya 'punchline'.
   - E (Easy Action): CTA yang santai, seperti memberi rekomendasi ke teman (Contoh: "Langsung co aja", "Spill di keranjang kuning", "Wajib punya sih"), dan mengarah ke keranjang kuning.
 
-  /* Variasi & Anti-Monoton (WAJIB DIPATUHI):
-     - Jangan selalu membuka dengan pola yang sama (misal "Abis ...", "POV ...").
-     - Variasikan diksi gaul & ritme kalimat, tetap natural & punchy. */
+  /* Variasi & Anti-Monoton:
+     - Hindari repetisi pembuka seperti "Abis ...", "POV ...".
+     - Dilarang memulai kalimat pertama dengan pembuka berikut (riwayat): ${avoidList.length ? avoidList.map(s=>`"${s}"`).join(", ") : "(tidak ada)"}
+     - Variasikan diksi gaul & ritme kalimat, tetap punchy. */
 
   Contoh:
   Input Produk: Sikat Gigi
@@ -89,7 +90,7 @@ const createGenZPrompt = (prod) => `
   Jawab hanya dalam format JSON.
 `;
 
-/* ===================== 4 FORMULA BARU (variatif by design) ===================== */
+/* ===================== 4 FORMULA TAMBAHAN (variatif by design) ===================== */
 
 // --- HABIT (Habit → Relate → Twist → Reveal) ---
 const createHabitPrompt = (prod) => `
@@ -194,7 +195,7 @@ export async function handler(event) {
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
   try {
-    const { product, mode, style = 'acta' } = JSON.parse(event.body || "{}");
+    const { product, mode, style = 'acta', avoidOpeners = [] } = JSON.parse(event.body || "{}");
     
     if (!product) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Nama produk tidak boleh kosong.' }) };
@@ -202,9 +203,9 @@ export async function handler(event) {
 
     let finalPrompt;
     if (style === 'halus') {
-      finalPrompt = createHalusPrompt(product);
+      finalPrompt = createHalusPrompt(product, avoidOpeners);
     } else if (style === 'genz') {
-      finalPrompt = createGenZPrompt(product);
+      finalPrompt = createGenZPrompt(product, avoidOpeners);
     } else if (style === 'habit') {
       finalPrompt = createHabitPrompt(product);
     } else if (style === 'relate') {
@@ -214,10 +215,9 @@ export async function handler(event) {
     } else if (style === 'hack') {
       finalPrompt = createHackPrompt(product);
     } else {
-      finalPrompt = createActaPrompt(product);
+      finalPrompt = createActaPrompt(product, avoidOpeners);
     }
 
-    // Dorong variasi khusus untuk 3 formula awal (tanpa mengubah struktur)
     const needsMoreVar = (style === 'acta' || style === 'halus' || style === 'genz');
 
     const response = await fetch(apiUrl, {
@@ -248,7 +248,7 @@ export async function handler(event) {
     }
 
     const data = await response.json();
-    const content = JSON.parse(data.choices[0].message.content);
+    const content = JSON.parse(data.choices[0].message.content || "{}");
 
     let result = {};
     if (mode === 'both') {
@@ -257,6 +257,9 @@ export async function handler(event) {
       result = { vo: content.vo };
     } else if (mode === 'caption') {
       result = { caption: content.caption };
+    } else {
+      // default fallback both
+      result = { vo: content.vo, caption: content.caption };
     }
 
     return {
